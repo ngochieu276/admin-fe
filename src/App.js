@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import User from "./containers/User";
+import Home from "./containers/Home";
+import Product from "./containers/Product";
+import PrivateRoute from "./components/HOC/PrivateRoute";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import Login from "./containers/Login";
+import ProductDetails from "./containers/Product/ProductDetails/ProductDetails";
 
 function App() {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    // if (!auth.authenticate) {
+    //   dispatch(isUserLoggedIn());
+    // }
+    // if (auth.authenticate) {
+    //   dispatch(getInitialData());
+    // }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Router>
+        <Switch>
+          <PrivateRoute path='/' exact component={Home} />
+          <PrivateRoute path='/product/:productId' component={ProductDetails} />
+          <PrivateRoute path='/user' component={User} />
+          <PrivateRoute path='/product' component={Product} />
+          <Route path='/login' component={Login} />
+        </Switch>
+      </Router>
     </div>
   );
 }

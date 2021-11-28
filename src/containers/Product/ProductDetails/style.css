@@ -1,0 +1,13 @@
+.detail-card {
+  box-shadow: 5px 5px 5px #ccc;
+  padding: 10px 10px;
+  margin: auto;
+}
+
+.detail-card input {
+  width: 50%;
+}
+
+.detail-card select {
+  width: 25%;
+}
