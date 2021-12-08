@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { Button } from "react-bootstrap";
 import { useTable, usePagination, useRowSelect } from "react-table";
-
+import { Link } from "react-router-dom";
 import makeData from "./makeData";
 import UserDetailsAndUpdate from "./UserDetailsAndUpdate";
 
@@ -84,30 +85,30 @@ function Table({ columns, data }) {
       data,
     },
     usePagination,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: "selection",
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ]);
-    }
+    useRowSelect
+    // (hooks) => {
+    //   hooks.visibleColumns.push((columns) => [
+    //     // Let's make a column for selection
+    //     {
+    //       id: "selection",
+    //       // The header can use the table's getToggleAllRowsSelectedProps method
+    //       // to render a checkbox
+    //       Header: ({ getToggleAllPageRowsSelectedProps }) => (
+    //         <div>
+    //           <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+    //         </div>
+    //       ),
+    //       // The cell can use the individual row's getToggleRowSelectedProps method
+    //       // to the render a checkbox
+    //       Cell: ({ row }) => (
+    //         <div>
+    //           <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+    //         </div>
+    //       ),
+    //     },
+    //     ...columns,
+    //   ]);
+    // }
   );
 
   // Render the UI for your table
@@ -143,18 +144,18 @@ function Table({ columns, data }) {
         This is just a very basic UI implementation:
       */}
       <div className='pagination'>
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           <BsFillSkipBackwardFill />
-        </button>{" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        </Button>{" "}
+        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
           <BsFillArrowLeftSquareFill />
-        </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        </Button>{" "}
+        <Button onClick={() => nextPage()} disabled={!canNextPage}>
           <BsFillArrowRightSquareFill />
-        </button>{" "}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        </Button>{" "}
+        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           <BsFillSkipForwardFill />
-        </button>{" "}
+        </Button>{" "}
         <span>
           Page{" "}
           <strong>
@@ -238,15 +239,35 @@ function DataTable(props) {
           },
         ],
       },
+      {
+        Header: "Details",
+        columns: [
+          {
+            Header: "Details",
+            accessor: "details",
+          },
+        ],
+      },
     ],
     []
   );
 
-  const data = React.useMemo(() => makeData(21), []);
+  const makeData = (data) => {
+    return data.map((user) => {
+      return {
+        ...user,
+        details: (
+          <Button>
+            <Link to={`/user/${user._id}`}>Details</Link>
+          </Button>
+        ),
+      };
+    });
+  };
 
   return (
     <Styles>
-      <Table columns={columns} data={props.data} />
+      <Table columns={columns} data={makeData(props.data)} />
     </Styles>
   );
 }

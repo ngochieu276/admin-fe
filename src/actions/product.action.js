@@ -4,7 +4,9 @@ import axios from "../helper/axios";
 export const getProducts = (query) => {
   return async (dispatch) => {
     dispatch({ type: productConstants.GET_PRODUCT_REQUEST });
-    const res = await axios.post("/product/getProductsByQuery", { query });
+    const res = await axios.post("/product/admin/getProductsByQuery", {
+      query,
+    });
 
     if (res.status === 200) {
       const { products, meta } = res.data;
@@ -27,7 +29,7 @@ export const createProduct = (product) => {
   return async (dispatch) => {
     try {
       dispatch({ type: productConstants.ADD_PRODUCT_REQUEST });
-      const res = await axios.post(`product/create`, { ...product });
+      const res = await axios.post(`product/admin/create`, { ...product });
       if (res.status === 201) {
         dispatch({ type: productConstants.ADD_PRODUCT_SUCCESS });
         dispatch(getProducts(""));
@@ -44,7 +46,7 @@ export const getProductById = (productId) => {
   return async (dispatch) => {
     try {
       dispatch({ type: productConstants.GET_PRODUCT_BY_ID_REQUEST });
-      const res = await axios.get(`product/${productId}`);
+      const res = await axios.get(`product/admin/${productId}`);
       if (res.status === 200) {
         const { product } = res.data;
 
@@ -68,7 +70,7 @@ export const getProductById = (productId) => {
 export const updateProduct = (payload) => {
   return async (dispatch) => {
     dispatch({ type: productConstants.UPDATE_PRODUCT_REQUEST });
-    const res = await axios.put("/product/update", { ...payload });
+    const res = await axios.put("/product/admin/update", { ...payload });
 
     if (res.status === 201) {
       dispatch({

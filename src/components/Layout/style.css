@@ -29,9 +29,15 @@
   margin: 5px 0 5px 10px;
   border-radius: 5p 0 0 5px;
   text-decoration: none;
+  transition: 0.25s ease all;
 }
 
 .sidebar ul li a.active {
   background: #333;
+  color: #fff;
+}
+
+.sidebar ul li a:hover {
+  background-color: rgb(46, 46, 38);
   color: #fff;
 }

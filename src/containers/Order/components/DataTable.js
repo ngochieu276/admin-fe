@@ -211,20 +211,8 @@ function App(props) {
         Header: "Name",
         columns: [
           {
-            Header: " Avatar",
-            accessor: "avatar",
-          },
-          {
-            Header: " Name",
-            accessor: "name",
-          },
-          {
-            Header: "Listed Price",
-            accessor: "listedPrice",
-          },
-          {
-            Header: "Discount Price",
-            accessor: "discountPrice",
+            Header: " OrderId",
+            accessor: "_id",
           },
         ],
       },
@@ -232,16 +220,16 @@ function App(props) {
         Header: "Info",
         columns: [
           {
-            Header: "Quantity",
-            accessor: "quantity",
+            Header: "Total Amount",
+            accessor: "totalAmount",
           },
           {
-            Header: "Is Hot",
-            accessor: "is_hot",
+            Header: "Total Item",
+            accessor: "totalItem",
           },
           {
-            Header: "In Slider",
-            accessor: "in_slider",
+            Header: "Type",
+            accessor: "paymentType",
           },
         ],
       },
@@ -249,8 +237,12 @@ function App(props) {
         Header: "Update",
         columns: [
           {
-            Header: "Update",
-            accessor: "update",
+            Header: "Status",
+            accessor: "paymentStatus",
+          },
+          {
+            Header: "Details",
+            accessor: "details",
           },
         ],
       },
@@ -259,15 +251,15 @@ function App(props) {
   );
 
   const makeData = (data) => {
-    return data.map((product) => {
+    return data.map((order) => {
       return {
-        ...product,
-        avatar: <img className='avatar' src={product.avatar} />,
-        is_hot: product.is_hot ? <BsFillCheckCircleFill /> : "",
-        in_slider: product.in_slider ? <BsFillCheckCircleFill /> : "",
-        update: (
+        ...order,
+        totalItem: order.items
+          .map((item) => item.purchaseQty)
+          .reduce((a, b) => a + b),
+        details: (
           <Button>
-            <Link to={`/product/${product._id}`}>Details</Link>
+            <Link to={`/order/${order._id}`}>Details</Link>
           </Button>
         ),
       };
