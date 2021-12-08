@@ -19,18 +19,7 @@ export const Order = (props) => {
     dispatch(getCustomerOrders());
   }, []);
 
-  const formatDate = (date) => {
-    if (date) {
-      const d = new Date(date);
-      return (
-        <div style={{ marginTop: "15px" }}>
-          <div>{`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`}</div>
-          <div>{`${d.getHours()}:${d.getMinutes()}`}</div>
-        </div>
-      );
-    }
-    return "";
-  };
+ 
 
   return (
     <Layout sidebar>

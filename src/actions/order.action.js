@@ -73,3 +73,28 @@ export const updateOrder = (payload) => {
     }
   };
 };
+
+export const getOrderBy = (orderBy) => {
+  return async (dispatch) => {
+    dispatch({ type: orderConstants.SORT_ORDER_REQUEST});
+    try {
+      const res = await axios.get(`order/admin/sort/${orderBy}`);
+
+      if (res.status === 200) {
+        const {orders} = res.data
+        dispatch({
+          type: orderConstants.SORT_ORDER_SUCCESS,
+          payload: {orders}
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: orderConstants.SORT_ORDER_FAILURE,
+          payload: { error },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}

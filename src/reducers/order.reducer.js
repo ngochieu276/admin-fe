@@ -13,6 +13,7 @@ export default (state = initState, action) => {
       state = { ...state, orders: action.payload.orders };
       break;
   }
+  // ///
   switch (action.type) {
     case orderConstants.GET_CUSTOM_ORDER_BY_ID_REQUEST:
       state = { ...state, loading: true };
@@ -25,6 +26,22 @@ export default (state = initState, action) => {
   }
   switch (action.type) {
     case orderConstants.GET_CUSTOM_ORDER_BY_ID_FAILURE:
+      state = { ...state, loading: false, error: action.payload.error };
+      break;
+  }
+  // ///
+  switch (action.type) {
+    case orderConstants.SORT_ORDER_REQUEST:
+      state = { ...state, loading: true };
+      break;
+  }
+  switch (action.type) {
+    case orderConstants.SORT_ORDER_SUCCESS:
+      state = { ...state, loading: false, orders: action.payload.orders };
+      break;
+  }
+  switch (action.type) {
+    case orderConstants.SORT_ORDER_FAILURE:
       state = { ...state, loading: false, error: action.payload.error };
       break;
   }

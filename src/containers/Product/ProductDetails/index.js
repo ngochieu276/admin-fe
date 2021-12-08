@@ -16,7 +16,9 @@ import "./style.css";
  **/
 
 const ProductDetails = (props) => {
-  const { selectedProduct } = useSelector((state) => state.product);
+  let { productId } = useParams();
+  const { products } = useSelector((state) => state.product);
+  const selectedProduct = products.find(product => product._id === productId)
 
   const [listedPrice, setListedPrice] = useState(
     selectedProduct ? selectedProduct.listedPrice : ""
@@ -40,10 +42,9 @@ const ProductDetails = (props) => {
     selectedProduct ? selectedProduct.supplier : ""
   );
   const [imgUrl, setUrl] = useState(null);
+  const [photos, setPhotos] = useState(selectedProduct ? selectedProduct.photos : []);
   const imageInputRef = useRef();
 
-  let { productId } = useParams();
-  console.log(productId);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -95,19 +96,38 @@ const ProductDetails = (props) => {
     }
   };
 
+  const handlePhotosInput = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file, file.name);
+
+    try {
+      const res = await axios.post("/image", formData);
+
+      if (res.data.success) {
+        setPhotos([...photos,res.data.data])
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const options = [
     { value: true, name: "True" },
     { value: false, name: "No" },
   ];
+
+
 
   return (
     <Layout sidebar>
       <Container className='detail-card'>
         <h3>{selectedProduct.name}</h3>
         <img className='avatar' src={selectedProduct.avatar} />
-        <div>
+        <div className="card-input">
           <Row>
             <Col>
+              <h4>Edit avatar </h4>
               <input
                 type='file'
                 onChange={handleFileInput}
@@ -165,6 +185,11 @@ const ProductDetails = (props) => {
                 onChange={(e) => setSupplier(e.target.value)}
                 className='form-control-sm'
               />
+              <h4>Edits Photos</h4>
+              <input type='file' onChange={handlePhotosInput} />
+              <div style={{ display: 'flex' }}>
+                {selectedProduct.photos.map(photo => <img className='avatar' alt='photo' src={photo} />)}
+              </div>
               <Button onClick={updateUserHandler}>Update</Button>
             </Col>
           </Row>

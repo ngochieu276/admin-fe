@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import { Link } from "react-router-dom";
+import { getOrderBy } from "../../../actions";
 import {
   BsFillArrowLeftSquareFill,
   BsFillArrowRightSquareFill,
@@ -10,6 +11,7 @@ import {
   BsFillSkipForwardFill,
   BsFillCheckCircleFill,
 } from "react-icons/bs";
+import { useDispatch } from "react-redux";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -38,23 +40,6 @@ const Styles = styled.div`
     padding: 0.5rem;
   }
 `;
-
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef();
-    const resolvedRef = ref || defaultRef;
-
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate;
-    }, [resolvedRef, indeterminate]);
-
-    return (
-      <>
-        <input type='checkbox' ref={resolvedRef} {...rest} />
-      </>
-    );
-  }
-);
 
 function Table({ columns, data }) {
   // Use the state and functions returned from useTable to build your UI
@@ -205,6 +190,15 @@ function Table({ columns, data }) {
 }
 
 function App(props) {
+  const dispatch = useDispatch()
+
+  const sortOrderBy = (value) => {
+     if (value === '1' || value === '-1') {
+      dispatch(getOrderBy(Number(value)))
+     }
+     
+  }
+
   const columns = React.useMemo(
     () => [
       {
@@ -241,6 +235,24 @@ function App(props) {
             accessor: "paymentStatus",
           },
           {
+            Header: <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
+              <option value={""}>CreatedAt</option>
+              <select onClick={(e) => sortOrderBy(e.target.value)}>
+              <option value={""}>Sort by</option>
+                <option value={-1} >
+                  Newest</option>
+                <option value={1} >
+                  Oldest</option>
+
+              </select>
+            </div>,
+            accessor: "createdAt",
+          },
+          {
+            Header: "UpdatedAt",
+            accessor: "updatedAt",
+          },
+          {
             Header: "Details",
             accessor: "details",
           },
@@ -249,6 +261,19 @@ function App(props) {
     ],
     []
   );
+
+  const formatDate = (date) => {
+    if (date) {
+      const d = new Date(date);
+      return (
+        <div style={{ marginTop: "15px" }}>
+          <div>{`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`}</div>
+          <div>{`${d.getHours()}:${d.getMinutes()}`}</div>
+        </div>
+      );
+    }
+    return "";
+  };
 
   const makeData = (data) => {
     return data.map((order) => {
@@ -262,6 +287,8 @@ function App(props) {
             <Link to={`/order/${order._id}`}>Details</Link>
           </Button>
         ),
+        updatedAt: formatDate(order.updatedAt),
+        createdAt: formatDate(order.createdAt)
       };
     });
   };

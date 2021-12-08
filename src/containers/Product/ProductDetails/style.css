@@ -4,8 +4,15 @@
   margin: auto;
 }
 
+.card-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .detail-card input {
-  width: 50%;
+  width: 100%;
 }
 
 .detail-card select {

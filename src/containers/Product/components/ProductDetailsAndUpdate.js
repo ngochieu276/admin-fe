@@ -103,6 +103,7 @@ const ProductDetailsAndUpdate = (props) => {
       >
         <Row>
           <Col>
+            <h4>Edit avatar </h4>
             <input type='file' onChange={handleFileInput} ref={imageInputRef} />
             {imgUrl && <img className='avatar' alt='avatar' src={imgUrl} />}
             <Input

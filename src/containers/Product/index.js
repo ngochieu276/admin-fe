@@ -20,12 +20,13 @@ const Product = (props) => {
   const [show, setShow] = useState(false);
 
   const [name, setName] = useState("");
-  const [listedPrice, setListedPrice] = useState(0);
-  const [discountPrice, setDiscountPrice] = useState(0);
+  const [listedPrice, setListedPrice] = useState(null);
+  const [discountPrice, setDiscountPrice] = useState(null);
   const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(null);
 
   const [imgUrl, setUrl] = useState(null);
+  const [photos,setPhotos] = useState([])
   const imageInputRef = useRef();
 
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ const Product = (props) => {
       description,
       quantity,
       avatar: imgUrl,
+      photos
     };
     setShow(false);
     dispatch(createProduct(product));
@@ -71,6 +73,22 @@ const Product = (props) => {
     }
   };
 
+  const handlePhotosInput = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file, file.name);
+
+    try {
+      const res = await axios.post("/image", formData);
+
+      if (res.data.success) {
+        setPhotos([...photos,res.data.data])
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const renderAddProductModal = (
     <NewModal
       show={show}
@@ -80,6 +98,9 @@ const Product = (props) => {
     >
       <Row>
         <Col>
+          <h4>Avatar</h4>
+          <input type='file' onChange={handleFileInput} ref={imageInputRef} />
+          {imgUrl && <img className='avatar' alt='avatar' src={imgUrl} />}
           <Input
             value={name}
             placeholder={`Name`}
@@ -110,8 +131,12 @@ const Product = (props) => {
             onChange={(e) => setQuantity(e.target.value)}
             className='form-control-sm'
           />
-          <input type='file' onChange={handleFileInput} ref={imageInputRef} />
-          {imgUrl && <img className='avatar' alt='avatar' src={imgUrl} />}
+          <h4>Photos</h4>
+          <input type='file' onChange={handlePhotosInput}  />
+          <div style={{display: 'flex'}}>
+          {photos.map(photo => <img className='avatar' alt='photo' src={photo} />)}
+          </div>
+          
         </Col>
       </Row>
     </NewModal>
