@@ -37,6 +37,8 @@ export const Login = (props) => {
       <Container style={{ padding: "50px" }}>
         <Row style={{ marginTop: "50px" }}>
           <Col md={{ span: 6, offset: 3 }}>
+            <p>Test account: admin1@gmail.com</p>
+            <p>pass: 123456</p>
             <Form onSubmit={userLogin}>
               <Input
                 placeholder='Email'
