@@ -3,7 +3,7 @@ import { orderConstants } from "../actions/constant";
 const initState = {
   orders: [],
   selectedOrder: {},
-  loading: false,
+  loading: true,
   error: null,
 };
 

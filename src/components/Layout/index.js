@@ -29,6 +29,9 @@ const Layout = (props) => {
                 <li>
                   <NavLink to={"/order"}>Order</NavLink>
                 </li>
+                <li>
+                  <NavLink to={"/post"}>Post</NavLink>
+                </li>
               </ul>
             </Col>
             <Col md={8} style={{ margin: "auto", paddingTop: "60px" }}>

@@ -10,6 +10,8 @@ import React, { useEffect } from "react";
 import Login from "./containers/Login";
 import ProductDetails from "./containers/Product/ProductDetails";
 import OrderDetails from "./containers/Order/OrderDetails";
+import Post from "./containers/Post";
+import PostDetails from "./containers/Post/PostDetails";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,7 +33,9 @@ function App() {
           <PrivateRoute path='/' exact component={Home} />
           <PrivateRoute path='/product/:productId' component={ProductDetails} />
           <PrivateRoute path='/order/:orderId' component={OrderDetails} />
+          <PrivateRoute path='/post/:postId' component={PostDetails} />
           <PrivateRoute path='/user' component={User} />
+          <PrivateRoute path='/post' component={Post} />
           <PrivateRoute path='/product' component={Product} />
           <PrivateRoute path='/order' component={Order} />
           <Route path='/login' component={Login} />

@@ -4,7 +4,7 @@ import axios from "../../../helper/axios";
 import Layout from "../../../components/Layout";
 import { getOrderById, updateOrder } from "../../../actions";
 import Card from "../../../components/UI/Card";
-
+import Spinner from "../../../components/UI/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.css";
 
@@ -15,9 +15,7 @@ import "./style.css";
 
 const OrderDetails = (props) => {
   let { orderId } = useParams();
-  const { orders } = useSelector((state) => state.order);
-  const selectedOrder = orders.find((order) => order._id === orderId);
-  console.log("ha");
+  const { selectedOrder, loading } = useSelector((state) => state.order);
   const [type, setType] = useState("");
 
   const dispatch = useDispatch();
@@ -39,6 +37,14 @@ const OrderDetails = (props) => {
     }
     return "";
   };
+
+  useEffect(() => {
+    dispatch(getOrderById(orderId));
+  }, []);
+
+  if (loading) {
+    return <Spinner />;
+  }
   return (
     <Layout sidebar>
       <Card

@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import { useTable, usePagination, useRowSelect } from "react-table";
@@ -17,7 +17,7 @@ const Styles = styled.div`
   padding: 1rem;
   table {
     border-spacing: 0;
-    border: 1px solid black;
+    border: 0.5px solid gray;
     tr {
       :last-child {
         td {
@@ -25,12 +25,14 @@ const Styles = styled.div`
         }
       }
     }
-    th,
+    th {
+      border-bottom: 0.5px solid gray;
+      border-right: 0.5px solid gray;
+    }
     td {
       margin: 0;
       padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
+      border-right: 0.5px solid gray;
       :last-child {
         border-right: 0;
       }
@@ -190,14 +192,13 @@ function Table({ columns, data }) {
 }
 
 function App(props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const sortOrderBy = (value) => {
-     if (value === '1' || value === '-1') {
-      dispatch(getOrderBy(Number(value)))
-     }
-     
-  }
+    if (value === "1" || value === "-1") {
+      dispatch(getOrderBy(Number(value)));
+    }
+  };
 
   const columns = React.useMemo(
     () => [
@@ -235,17 +236,16 @@ function App(props) {
             accessor: "paymentStatus",
           },
           {
-            Header: <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-              <option value={""}>CreatedAt</option>
-              <select onClick={(e) => sortOrderBy(e.target.value)}>
-              <option value={""}>Sort by</option>
-                <option value={-1} >
-                  Newest</option>
-                <option value={1} >
-                  Oldest</option>
-
-              </select>
-            </div>,
+            Header: (
+              <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
+                <option value={""}>CreatedAt</option>
+                <select onClick={(e) => sortOrderBy(e.target.value)}>
+                  <option value={""}>Sort by</option>
+                  <option value={-1}>Newest</option>
+                  <option value={1}>Oldest</option>
+                </select>
+              </div>
+            ),
             accessor: "createdAt",
           },
           {
@@ -288,7 +288,7 @@ function App(props) {
           </Button>
         ),
         updatedAt: formatDate(order.updatedAt),
-        createdAt: formatDate(order.createdAt)
+        createdAt: formatDate(order.createdAt),
       };
     });
   };

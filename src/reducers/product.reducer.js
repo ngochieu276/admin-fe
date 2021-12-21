@@ -2,7 +2,7 @@ import { productConstants } from "../actions/constant";
 
 const initialState = {
   products: [],
-  loading: false,
+  loading: true,
   selectedProduct: {},
 };
 

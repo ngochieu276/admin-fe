@@ -8,6 +8,7 @@ import { getUsers } from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
 import { createAdminUser } from "../../actions/user.actions";
 import NewModal from "../../components/UI/Modal";
+import Spinner from "../../components/UI/Spinner";
 
 /**
  * @author
@@ -21,7 +22,7 @@ const User = (props) => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  const { users, meta } = useSelector((state) => state.user);
+  const { users, loading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -70,6 +71,14 @@ const User = (props) => {
       </Row>
     </NewModal>
   );
+
+  if (loading) {
+    return (
+      <Layout sidebar>
+        <Spinner />
+      </Layout>
+    );
+  }
 
   return (
     <Layout sidebar>

@@ -6,6 +6,7 @@ import Layout from "../../components/Layout";
 import { getProducts, createProduct } from "../../actions/product.action";
 import TableData from "./components/DataTable";
 import NewModal from "../../components/UI/Modal";
+import Spinner from "../../components/UI/Spinner";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,11 +27,11 @@ const Product = (props) => {
   const [quantity, setQuantity] = useState(null);
 
   const [imgUrl, setUrl] = useState(null);
-  const [photos,setPhotos] = useState([])
+  const [photos, setPhotos] = useState([]);
   const imageInputRef = useRef();
 
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
+  const { products, loading } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(getProducts(""));
@@ -51,7 +52,7 @@ const Product = (props) => {
       description,
       quantity,
       avatar: imgUrl,
-      photos
+      photos,
     };
     setShow(false);
     dispatch(createProduct(product));
@@ -82,7 +83,7 @@ const Product = (props) => {
       const res = await axios.post("/image", formData);
 
       if (res.data.success) {
-        setPhotos([...photos,res.data.data])
+        setPhotos([...photos, res.data.data]);
       }
     } catch (err) {
       console.log(err);
@@ -132,15 +133,24 @@ const Product = (props) => {
             className='form-control-sm'
           />
           <h4>Photos</h4>
-          <input type='file' onChange={handlePhotosInput}  />
-          <div style={{display: 'flex'}}>
-          {photos.map(photo => <img className='avatar' alt='photo' src={photo} />)}
+          <input type='file' onChange={handlePhotosInput} />
+          <div style={{ display: "flex" }}>
+            {photos.map((photo) => (
+              <img className='avatar' alt='photo' src={photo} />
+            ))}
           </div>
-          
         </Col>
       </Row>
     </NewModal>
   );
+
+  if (loading) {
+    return (
+      <Layout sidebar>
+        <Spinner />
+      </Layout>
+    );
+  }
 
   return (
     <Layout sidebar>

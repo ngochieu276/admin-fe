@@ -14,6 +14,7 @@ import {
 const Styles = styled.div`
   padding: 1rem;
   table {
+    width: 100%;
     border-spacing: 0;
     border: 0.5px solid gray;
     tr {
@@ -213,20 +214,8 @@ function App(props) {
         Header: "Name",
         columns: [
           {
-            Header: " Avatar",
-            accessor: "avatar",
-          },
-          {
-            Header: " Name",
-            accessor: "name",
-          },
-          {
-            Header: "Listed Price",
-            accessor: "listedPrice",
-          },
-          {
-            Header: "Discount Price",
-            accessor: "discountPrice",
+            Header: "Title",
+            accessor: "title",
           },
         ],
       },
@@ -234,22 +223,13 @@ function App(props) {
         Header: "Info",
         columns: [
           {
-            Header: "Quantity",
-            accessor: "quantity",
+            Header: "CreatedBy",
+            accessor: "createdBy",
           },
           {
-            Header: "Is Hot",
-            accessor: "is_hot",
+            Header: "CreatedAt",
+            accessor: "createdAt",
           },
-          {
-            Header: "In Slider",
-            accessor: "in_slider",
-          },
-        ],
-      },
-      {
-        Header: "Update",
-        columns: [
           {
             Header: "Update",
             accessor: "update",
@@ -260,16 +240,28 @@ function App(props) {
     []
   );
 
+  const formatDate = (date) => {
+    if (date) {
+      const d = new Date(date);
+      return (
+        <div style={{ marginTop: "15px" }}>
+          <div>{`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`}</div>
+          <div>{`${d.getHours()}:${d.getMinutes()}`}</div>
+        </div>
+      );
+    }
+    return "";
+  };
+
   const makeData = (data) => {
-    return data.map((product) => {
+    return data.map((post) => {
       return {
-        ...product,
-        avatar: <img className='avatar' src={product.avatar} />,
-        is_hot: product.is_hot ? <BsFillCheckCircleFill /> : "",
-        in_slider: product.in_slider ? <BsFillCheckCircleFill /> : "",
+        ...post,
+        createdBy: post.createdBy.userName,
+        createdAt: formatDate(post.createdAt),
         update: (
           <Button>
-            <Link to={`/product/${product._id}`}>Details</Link>
+            <Link to={`/post/${post._id}`}>Details</Link>
           </Button>
         ),
       };
