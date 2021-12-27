@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "../../../helper/axios";
 import Layout from "../../../components/Layout";
@@ -6,7 +7,12 @@ import { getOrderById, updateOrder } from "../../../actions";
 import Card from "../../../components/UI/Card";
 import Spinner from "../../../components/UI/Spinner";
 import { useDispatch, useSelector } from "react-redux";
+import "antd/dist/antd.css";
+import { Steps } from "antd";
+import { BsFillCheckCircleFill } from "react-icons/bs";
 import "./style.css";
+
+const { Step } = Steps;
 
 /**
  * @author
@@ -15,8 +21,13 @@ import "./style.css";
 
 const OrderDetails = (props) => {
   let { orderId } = useParams();
-  const { selectedOrder, loading } = useSelector((state) => state.order);
+  const { selectedOrder, orders, loading } = useSelector(
+    (state) => state.order
+  );
   const [type, setType] = useState("");
+
+  const [orderStatus, setOrderStatus] = useState([]);
+  const [items, setItems] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -40,10 +51,19 @@ const OrderDetails = (props) => {
 
   useEffect(() => {
     dispatch(getOrderById(orderId));
-  }, []);
+  }, [orders]);
+
+  useEffect(() => {
+    setOrderStatus(selectedOrder.orderStatus);
+    setItems(selectedOrder.items);
+  }, [selectedOrder]);
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <Layout sidebar>
+        <Spinner />
+      </Layout>
+    );
   }
   return (
     <Layout sidebar>
@@ -57,33 +77,36 @@ const OrderDetails = (props) => {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            padding: "50px 50px",
+            padding: "20px 50px",
             alignItems: "center",
           }}
         >
           <div>
             <div className='title'>Items</div>
-            {selectedOrder.items.map((item, index) => (
-              <div className='value' key={index}>
-                {item.productId.name}
-              </div>
-            ))}
+            {items &&
+              items.map((item, index) => (
+                <div className='value' key={index}>
+                  {item.productId.name}
+                </div>
+              ))}
           </div>
           <div>
             <div className='title'>Quantity</div>
-            {selectedOrder.items.map((item, index) => (
-              <div className='value' key={index}>
-                {item.purchaseQty}
-              </div>
-            ))}
+            {items &&
+              items.map((item, index) => (
+                <div className='value' key={index}>
+                  {item.purchaseQty}
+                </div>
+              ))}
           </div>
           <div>
             <div className='title'>PayablePrice</div>
-            {selectedOrder.items.map((item, index) => (
-              <div className='value' key={index}>
-                {item.payablePrice}
-              </div>
-            ))}
+            {items &&
+              items.map((item, index) => (
+                <div className='value' key={index}>
+                  {item.payablePrice}
+                </div>
+              ))}
           </div>
           <div>
             <span className='title'>Total Price</span>
@@ -101,54 +124,65 @@ const OrderDetails = (props) => {
         </div>
         <div
           style={{
-            display: "flex",
             boxSizing: "border-box",
-            padding: "100px",
+            padding: " 50px 100px 50px 100px",
             alignItems: "center",
           }}
         >
           <div className='orderTrack'>
-            {selectedOrder.orderStatus.map((status) => {
-              return (
-                <div
-                  className='orderStatus'
-                  className={`orderStatus ${
-                    status.isCompleted ? `active` : null
-                  }`}
-                >
+            {orderStatus &&
+              orderStatus.map((status) => {
+                return (
                   <div
-                    className={`point ${status.isCompleted ? `active` : null}`}
-                  ></div>
-                  <div className='orderInfo'>
-                    <div className='status'>{status.type}</div>
-                    <div className='date'>{formatDate(status.date)}</div>
+                    className='orderStatus'
+                    className={`orderStatus ${
+                      status.isCompleted ? `active` : null
+                    }`}
+                  >
+                    <BsFillCheckCircleFill
+                      className={`point ${
+                        status.isCompleted ? `active` : null
+                      }`}
+                    />
+
+                    <div className='orderInfo'>
+                      <div className='status'>{status.type.toUpperCase()}</div>
+                      <div className='date'>{formatDate(status.date)}</div>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
           {/* select input to apply order action */}
           <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
             <option value={""}>Select type</option>
-            <select onClick={(e) => setType(e.target.value)}>
-              {selectedOrder.orderStatus.map((status, key) => {
-                return (
-                  <>
-                    {!status.isCompleted ? (
-                      <option key={status.type} value={status.type}>
-                        {status.type}
-                      </option>
-                    ) : null}
-                  </>
-                );
-              })}
+            <select
+              onClick={(e) => setType(e.target.value)}
+              style={{
+                border: "1px solid #cdcdcd",
+                borderRadius: "2px",
+                padding: "3px 5px",
+              }}
+            >
+              {orderStatus &&
+                orderStatus.map((status, key) => {
+                  return (
+                    <>
+                      {!status.isCompleted ? (
+                        <option key={status.type} value={status.type}>
+                          {status.type}
+                        </option>
+                      ) : null}
+                    </>
+                  );
+                })}
             </select>
           </div>
           {/* confirm button */}
           <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-            <button onClick={() => onOrderUpdate(selectedOrder._id)}>
+            <Button onClick={() => onOrderUpdate(selectedOrder._id)}>
               Confirm
-            </button>
+            </Button>
           </div>
         </div>
       </Card>

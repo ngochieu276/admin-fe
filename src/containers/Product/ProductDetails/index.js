@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import axios from "../../../helper/axios";
 import Layout from "../../../components/Layout";
@@ -9,6 +9,7 @@ import Spinner from "../../../components/UI/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { Container } from "@material-ui/core";
 import "./style.css";
+import { BsXSquare } from "react-icons/bs";
 
 /**
  * @author
@@ -17,57 +18,56 @@ import "./style.css";
 
 const ProductDetails = (props) => {
   let { productId } = useParams();
-  const { selectedProduct, loading } = useSelector((state) => state.product);
+  const { selectedProduct, loadingSpec, error, products } = useSelector(
+    (state) => state.product
+  );
 
-  const [listedPrice, setListedPrice] = useState(
-    selectedProduct ? selectedProduct.listedPrice : ""
-  );
-  const [discountPrice, setDiscountPrice] = useState(
-    selectedProduct ? selectedProduct.discountPrice : ""
-  );
-  const [isHot, setIsHot] = useState(
-    selectedProduct ? selectedProduct.is_hot : ""
-  );
-  const [inSlider, setInslider] = useState(
-    selectedProduct ? selectedProduct.in_slider : ""
-  );
-  const [quantity, setQuantity] = useState(
-    selectedProduct ? selectedProduct.quantity : ""
-  );
-  const [description, setDescription] = useState(
-    selectedProduct ? selectedProduct.description : ""
-  );
-  const [supplier, setSupplier] = useState(
-    selectedProduct ? selectedProduct.supplier : ""
-  );
-  const [imgUrl, setUrl] = useState(null);
-  const [photos, setPhotos] = useState(
-    selectedProduct ? selectedProduct.photos : []
-  );
+  const [edit, setEdit] = useState(false);
+
+  const [listedPrice, setListedPrice] = useState("");
+  const [discountPrice, setDiscountPrice] = useState("");
+  const [isHot, setIsHot] = useState("");
+  const [inSlider, setInslider] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [tags, setTags] = useState([]);
+  const [description, setDescription] = useState("");
+  const [supplier, setSupplier] = useState("");
+  const [imgUrl, setUrl] = useState("");
+  const [photos, setPhotos] = useState([]);
   const imageInputRef = useRef();
+  const tagRef = useRef();
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getProductById(productId));
-  }, []);
+  }, [products]);
+  useEffect(() => {
+    if (selectedProduct) {
+      setTags(selectedProduct.tags);
+      setPhotos(selectedProduct.photos);
+      setUrl(selectedProduct.avatar);
+    }
+  }, [selectedProduct]);
 
   const updateUserHandler = (e) => {
     const payload = {
       updateProduct: {
         productId: selectedProduct._id,
-        listedPrice,
-        discountPrice,
-        is_hot: isHot,
-        in_slider: inSlider,
-        quantity,
-        description,
-        supplier,
-        avatar: imgUrl,
+        listedPrice: listedPrice || selectedProduct.listedPrice,
+        discountPrice: discountPrice || selectedProduct.discountPrice,
+        is_hot: isHot || selectedProduct.is_hot,
+        tags: tags || selectedProduct.tags,
+        in_slider: inSlider || selectedProduct.in_slider,
+        quantity: quantity || selectedProduct.quantity,
+        description: description || selectedProduct.description,
+        supplier: description || selectedProduct.supplier,
+        photos: photos || selectedProduct.photos,
+        avatar: imgUrl || selectedProduct.avatar,
       },
     };
     dispatch(updateProduct(payload));
-
     resetInputForm();
   };
   const resetInputForm = () => {
@@ -113,24 +113,57 @@ const ProductDetails = (props) => {
     }
   };
 
+  const removePhoto = (value) => {
+    setPhotos([...photos].filter((photo) => photo !== value));
+  };
+
+  const handleTagsInput = () => {
+    if (tagRef.current.value == "") return;
+    setTags([...tags, tagRef.current.value]);
+    tagRef.current.value = "";
+    console.log(tagRef.current.value);
+  };
+
+  const removeTag = (value) => {
+    setTags([...tags].filter((tag) => tag !== value));
+  };
+
+  const setEditable = () => {
+    console.log("setEditable");
+  };
+
   const options = [
+    { value: "", name: "Choose condition" },
     { value: true, name: "True" },
-    { value: false, name: "No" },
+    { value: false, name: "False" },
   ];
 
-  if (loading) {
-    return <Spinner />;
+  const renderInputError = (field) => {
+    if (error && field === error.path) {
+      return (
+        <div className='inputError' style={{ color: "red", textAlign: "left" }}>
+          {error.kind} is required, please check your input
+        </div>
+      );
+    }
+  };
+
+  if (loadingSpec) {
+    return (
+      <Layout sidebar>
+        <Spinner />
+      </Layout>
+    );
   }
 
   return (
     <Layout sidebar>
       <Container className='detail-card'>
         <h3>{selectedProduct.name}</h3>
-        <img className='avatar' src={selectedProduct.avatar} />
         <div className='card-input'>
           <Row>
             <Col>
-              <h4>Edit avatar </h4>
+              <h6>Edit avatar </h6>
               <input
                 type='file'
                 onChange={handleFileInput}
@@ -144,6 +177,7 @@ const ProductDetails = (props) => {
                 onChange={(e) => setListedPrice(e.target.value)}
                 className='form-control-sm'
               />
+              {renderInputError("listedPrice")}
               <Input
                 label={"Discount Price"}
                 value={discountPrice}
@@ -151,6 +185,7 @@ const ProductDetails = (props) => {
                 onChange={(e) => setDiscountPrice(e.target.value)}
                 className='form-control-sm'
               />
+              {renderInputError("discountPrice")}
               <Input
                 type='select'
                 label={"Is hot"}
@@ -174,6 +209,7 @@ const ProductDetails = (props) => {
                 onChange={(e) => setQuantity(e.target.value)}
                 className='form-control-sm'
               />
+              {renderInputError("quantity")}
               <Input
                 label={"Description"}
                 value={description}
@@ -188,12 +224,32 @@ const ProductDetails = (props) => {
                 onChange={(e) => setSupplier(e.target.value)}
                 className='form-control-sm'
               />
+              <div>
+                <input type='text' ref={tagRef} placeholder={"Edit tags"} />
+                <Button onClick={handleTagsInput}>Add tag</Button>
+              </div>
+              <div style={{ marginTop: "4px" }}>
+                {tags &&
+                  tags.map((tag) => (
+                    <span className='tag'>
+                      {tag}
+                      <BsXSquare onClick={() => removeTag(tag)} />
+                    </span>
+                  ))}
+              </div>
               <h4>Edits Photos</h4>
               <input type='file' onChange={handlePhotosInput} />
               <div style={{ display: "flex" }}>
-                {selectedProduct.photos.map((photo) => (
-                  <img className='avatar' alt='photo' src={photo} />
-                ))}
+                {photos &&
+                  photos.map((photo) => (
+                    <div className='photo-item'>
+                      <img className='avatar' alt='photo' src={photo} />
+                      <BsXSquare
+                        onClick={() => removePhoto(photo)}
+                        className='icon'
+                      />
+                    </div>
+                  ))}
               </div>
               <Button onClick={updateUserHandler}>Update</Button>
             </Col>

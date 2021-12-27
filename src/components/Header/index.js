@@ -5,8 +5,6 @@ import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../actions";
 
-import "./style.css";
-
 /**
  * @author
  * @function Header

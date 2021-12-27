@@ -18,7 +18,6 @@ const initialState = {
   message: "",
 };
 export default (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case authConstant.LOGIN_REQUEST:
       state = {
@@ -31,6 +30,7 @@ export default (state = initialState, action) => {
         ...state,
         user: action.payload.user,
         token: action.payload.token,
+        error: null,
         authenticate: true,
         authenticating: false,
       };

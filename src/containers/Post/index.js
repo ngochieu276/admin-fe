@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "../../helper/axios";
 import { Row, Button, Col } from "react-bootstrap";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -10,32 +11,69 @@ import DataTable from "./components/DataTable";
 import NewModal from "../../components/UI/Modal";
 import Input from "../../components/UI/Input";
 import Spinner from "../../components/UI/Spinner";
+import { BsXSquare } from "react-icons/bs";
 
 const Editor = () => {
+  const { posts, loading } = useSelector((state) => state.post);
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
-  const { posts, loading } = useSelector((state) => state.post);
   const [post, setPost] = useState("");
+  const [tags, setTags] = useState([]);
+  const [imgUrl, setUrl] = useState(null);
   const dispatch = useDispatch();
+  const imageInputRef = useRef();
+  const tagRef = useRef();
 
   useEffect(() => {
     dispatch(getPost());
   }, []);
 
   const submitCreatePost = () => {
-    dispatch(createPost({ postContent: post, postTitle: title }));
+    dispatch(
+      createPost({ postContent: post, postTitle: title, tags, avatar: imgUrl })
+    );
     setShow(false);
+  };
+
+  const handleFileInput = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file, file.name);
+
+    try {
+      const res = await axios.post("/image", formData);
+
+      if (res.data.success) {
+        setUrl(res.data.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleTagsInput = () => {
+    if (tagRef.current.value == "") return;
+    setTags([...tags, tagRef.current.value]);
+    tagRef.current.value = "";
+    console.log(tagRef.current.value);
+  };
+
+  const removeTag = (value) => {
+    setTags([...tags].filter((tag) => tag !== value));
   };
 
   const renderCkEditor = (
     <NewModal
+      size={"xl"}
       show={show}
       handleClose={() => setShow(false)}
       onSubmit={submitCreatePost}
       modalTitle={"Add new post"}
     >
       <div className='Editor'>
-        <h2>Create New Post</h2>
+        <h4>Avatar</h4>
+        <input type='file' onChange={handleFileInput} ref={imageInputRef} />
+        {imgUrl && <img className='avatar' alt='avatar' src={imgUrl} />}
         <Input
           placeholder="Enter post's title "
           value={title}
@@ -44,6 +82,18 @@ const Editor = () => {
             setTitle(e.target.value);
           }}
         />
+        <div>
+          <input type='text' ref={tagRef} />
+          <button onClick={handleTagsInput}>Add tag</button>
+        </div>
+        <div style={{ marginTop: "4px" }}>
+          {tags.map((tag) => (
+            <span className='tag'>
+              {tag}
+              <BsXSquare onClick={() => removeTag(tag)} />
+            </span>
+          ))}
+        </div>
         <CKEditor
           editor={ClassicEditor}
           data={post}
@@ -76,24 +126,13 @@ const Editor = () => {
   return (
     <Layout sidebar>
       <Row>
-        {/* <Col>
-          <Input
-            placeholder='Search for user'
-            value={query}
-            type='text'
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-          />
-        </Col>
-        <Button onClick={searchForQuery}>Search</Button> */}
         <Col>
           <Button
             onClick={() => {
               setShow(true);
             }}
           >
-            Add new Post
+            Create post
           </Button>
         </Col>
       </Row>

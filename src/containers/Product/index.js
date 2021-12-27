@@ -3,10 +3,15 @@ import axios from "../../helper/axios";
 import { Button, Row, Col } from "react-bootstrap";
 import Input from "../../components/UI/Input";
 import Layout from "../../components/Layout";
-import { getProducts, createProduct } from "../../actions/product.action";
+import {
+  getProducts,
+  createProduct,
+  deleteProduct,
+} from "../../actions/product.action";
 import TableData from "./components/DataTable";
 import NewModal from "../../components/UI/Modal";
 import Spinner from "../../components/UI/Spinner";
+import { BsXSquare } from "react-icons/bs";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,16 +24,19 @@ import "./style.css";
 const Product = (props) => {
   const [query, setQuery] = useState("");
   const [show, setShow] = useState(false);
+  const [showDel, setShowDel] = useState(false);
+  const [productToDel, setProductToDel] = useState("");
 
   const [name, setName] = useState("");
   const [listedPrice, setListedPrice] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(null);
-
+  const [tags, setTags] = useState([]);
   const [imgUrl, setUrl] = useState(null);
   const [photos, setPhotos] = useState([]);
   const imageInputRef = useRef();
+  const tagRef = useRef();
 
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.product);
@@ -51,6 +59,7 @@ const Product = (props) => {
       listedPrice,
       description,
       quantity,
+      tags,
       avatar: imgUrl,
       photos,
     };
@@ -88,6 +97,27 @@ const Product = (props) => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleTagsInput = () => {
+    if (tagRef.current.value == "") return;
+    setTags([...tags, tagRef.current.value]);
+    tagRef.current.value = "";
+    console.log(tagRef.current.value);
+  };
+
+  const removeTag = (value) => {
+    setTags([...tags].filter((tag) => tag !== value));
+  };
+
+  const onDelete = (productId) => {
+    setShowDel(true);
+    setProductToDel(productId);
+  };
+
+  const confirmDelete = () => {
+    dispatch(deleteProduct(productToDel));
+    setShowDel(false);
   };
 
   const renderAddProductModal = (
@@ -132,6 +162,18 @@ const Product = (props) => {
             onChange={(e) => setQuantity(e.target.value)}
             className='form-control-sm'
           />
+          <div>
+            <input type='text' ref={tagRef} />
+            <button onClick={handleTagsInput}>Add tag</button>
+          </div>
+          <div style={{ marginTop: "4px" }}>
+            {tags.map((tag) => (
+              <span className='tag'>
+                {tag}
+                <BsXSquare onClick={() => removeTag(tag)} />
+              </span>
+            ))}
+          </div>
           <h4>Photos</h4>
           <input type='file' onChange={handlePhotosInput} />
           <div style={{ display: "flex" }}>
@@ -139,6 +181,22 @@ const Product = (props) => {
               <img className='avatar' alt='photo' src={photo} />
             ))}
           </div>
+        </Col>
+      </Row>
+    </NewModal>
+  );
+
+  const renderConfirmDelete = (
+    <NewModal
+      show={showDel}
+      handleClose={() => setShowDel(false)}
+      onSubmit={() => {}}
+      modalTitle={"This action can't be undone,sure ?"}
+    >
+      <Row>
+        <Col>
+          <Button onClick={confirmDelete}>Delete</Button>
+          <Button onClick={() => setShowDel(false)}>Cancel</Button>
         </Col>
       </Row>
     </NewModal>
@@ -154,31 +212,28 @@ const Product = (props) => {
 
   return (
     <Layout sidebar>
-      <Row>
-        <Col>
-          <Input
-            placeholder='Search for user'
-            value={query}
-            type='text'
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-          />
-        </Col>
+      <div style={{ display: "flex", padding: "1rem" }}>
+        <Input
+          placeholder='Search for user'
+          value={query}
+          type='text'
+          onChange={(e) => {
+            setQuery(e.target.value);
+          }}
+        />
         <Button onClick={searchForQuery}>Search</Button>
-        <Col>
-          <Button
-            onClick={() => {
-              setShow(true);
-            }}
-          >
-            Add new Product
-          </Button>
-        </Col>
-      </Row>
+        <Button
+          onClick={() => {
+            setShow(true);
+          }}
+        >
+          Add new Product
+        </Button>
+      </div>
 
-      <TableData data={products} />
+      <TableData data={products} onDelete={onDelete} />
       {renderAddProductModal}
+      {renderConfirmDelete}
     </Layout>
   );
 };

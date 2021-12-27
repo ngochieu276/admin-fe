@@ -3,6 +3,7 @@ import { postConstant } from "../actions/constant";
 const initialState = {
   posts: [],
   selectedPost: {},
+  loadingSpec: true,
   loading: true,
 };
 
@@ -38,6 +39,7 @@ export default (state = initialState, action) => {
         ...state,
         posts: action.payload.posts,
         loading: false,
+        loadingSpec: true,
       };
       break;
     case postConstant.GET_POST_FAILURE:
@@ -50,20 +52,20 @@ export default (state = initialState, action) => {
     case postConstant.GET_POST_BY_ID_REQUEST:
       state = {
         ...state,
-        loading: true,
+        loadingSpec: true,
       };
       break;
     case postConstant.GET_POST_BY_ID_SUCCESS:
       state = {
         ...state,
         selectedPost: action.payload.post,
-        loading: false,
+        loadingSpec: false,
       };
       break;
     case postConstant.GET_POST_BY_ID_FAILURE:
       state = {
         ...state,
-        loading: false,
+        loadingSpec: false,
       };
       break;
   }

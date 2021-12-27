@@ -15,7 +15,7 @@ const Layout = (props) => {
       {props.sidebar ? (
         <Container fluid>
           <Row>
-            <Col md={2} className='sidebar'>
+            <Col lg={2} className='sidebar'>
               <ul>
                 <li>
                   <NavLink to={"/"}>Home</NavLink>
@@ -34,7 +34,7 @@ const Layout = (props) => {
                 </li>
               </ul>
             </Col>
-            <Col md={8} style={{ margin: "auto", paddingTop: "60px" }}>
+            <Col lg={8} style={{ margin: "auto", paddingTop: "60px" }}>
               {props.children}
             </Col>
           </Row>

@@ -57,7 +57,9 @@ export const Login = (props) => {
                   setPassword(e.target.value);
                 }}
               />
-
+              <div style={{ color: "red", textAlign: "left" }}>
+                {auth.error}
+              </div>
               <Button variant='primary' type='submit'>
                 Submit
               </Button>

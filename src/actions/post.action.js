@@ -11,6 +11,7 @@ export const createPost = (post) => {
           type: postConstant.CREATE_POST_SUCCESS,
           payload: { post },
         });
+        dispatch(getPost());
       } else {
         dispatch({
           type: postConstant.CREATE_POST_FAILURE,

@@ -47,7 +47,15 @@ a:hover {
 }
 
 .btn-primary {
-  background-color: #ef9273;
+  border: none;
+  background-color: #dfb6a8;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  border: none;
+  border-color: #dfb6a8;
+  background-color: #dfb6a8;
 }
 
 .btn-primary:hover {
@@ -65,19 +73,15 @@ table {
   overflow: hidden;
   max-width: 800px;
   width: 100%;
-  margin: 0 auto;
   position: relative;
 }
 table * {
   position: relative;
 }
-table td,
-table th {
-  padding-left: 8px;
-}
+
 table thead tr {
   height: 60px;
-  background: #8b8459;
+  background: #b3ae94;
   font-size: 16px;
 }
 table tbody tr {
@@ -89,7 +93,11 @@ table tbody tr:last-child {
 }
 table td,
 table th {
-  text-align: left;
+  text-align: center;
+}
+table th {
+  border-bottom: 0.5px solid rgb(163, 155, 155);
+  border-right: 0.5px solid rgb(163, 155, 155);
 }
 table td.l,
 table th.l {
@@ -102,6 +110,14 @@ table th.c {
 table td.r,
 table th.r {
   text-align: center;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #ddd;
 }
 
 @media screen and (max-width: 35.5em) {

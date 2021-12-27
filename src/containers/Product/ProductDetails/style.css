@@ -18,3 +18,15 @@
 .detail-card select {
   width: 25%;
 }
+
+.photo-item {
+  position: relative;
+}
+
+.photo-item .icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: bisque;
+  cursor: pointer;
+}

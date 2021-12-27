@@ -12,19 +12,18 @@ import ProductDetails from "./containers/Product/ProductDetails";
 import OrderDetails from "./containers/Order/OrderDetails";
 import Post from "./containers/Post";
 import PostDetails from "./containers/Post/PostDetails";
+import UserDetails from "./containers/User/UserDetails";
+import { isUserLoggedIn, getInitialData } from "./actions";
 
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // if (!auth.authenticate) {
-    //   dispatch(isUserLoggedIn());
-    // }
-    // if (auth.authenticate) {
-    //   dispatch(getInitialData());
-    // }
-  }, []);
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    }
+  }, [auth.authenticate]);
 
   return (
     <div className='App'>
@@ -34,6 +33,7 @@ function App() {
           <PrivateRoute path='/product/:productId' component={ProductDetails} />
           <PrivateRoute path='/order/:orderId' component={OrderDetails} />
           <PrivateRoute path='/post/:postId' component={PostDetails} />
+          <PrivateRoute path='/user/:userId' component={UserDetails} />
           <PrivateRoute path='/user' component={User} />
           <PrivateRoute path='/post' component={Post} />
           <PrivateRoute path='/product' component={Product} />

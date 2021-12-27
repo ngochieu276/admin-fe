@@ -25,6 +25,31 @@ export const getCustomerOrders = () => {
   };
 };
 
+export const getOrdersByEmail = (payload) => {
+  return async (dispatch) => {
+    dispatch({ type: orderConstants.GET_CUSTOMER_ORDER_BYEMAIL_REQUEST });
+    try {
+      const res = await axios.post("order/admin/getOrdersByEmail", {
+        ...payload,
+      });
+      if (res.status === 200) {
+        const { orders } = res.data;
+        dispatch({
+          type: orderConstants.GET_CUSTOMER_ORDER_BYEMAIL_SUCCESS,
+          payload: { orders },
+        });
+      }
+    } catch (err) {
+      console.log(err.response);
+      // const { error } = err.response.data;
+      // dispatch({
+      //   type: orderConstants.GET_CUSTOMER_ORDER_BYEMAIL_FAILURE,
+      //   payload: { error },
+      // });
+    }
+  };
+};
+
 export const getOrderById = (orderId) => {
   return async (dispatch) => {
     dispatch({ type: orderConstants.GET_CUSTOM_ORDER_BY_ID_REQUEST });
@@ -76,15 +101,15 @@ export const updateOrder = (payload) => {
 
 export const getOrderBy = (orderBy) => {
   return async (dispatch) => {
-    dispatch({ type: orderConstants.SORT_ORDER_REQUEST});
+    dispatch({ type: orderConstants.SORT_ORDER_REQUEST });
     try {
       const res = await axios.get(`order/admin/sort/${orderBy}`);
 
       if (res.status === 200) {
-        const {orders} = res.data
+        const { orders } = res.data;
         dispatch({
           type: orderConstants.SORT_ORDER_SUCCESS,
-          payload: {orders}
+          payload: { orders },
         });
       } else {
         const { error } = res.data;
@@ -97,4 +122,4 @@ export const getOrderBy = (orderBy) => {
       console.log(err);
     }
   };
-}
+};
