@@ -64,7 +64,12 @@ export const Order = (props) => {
           }}
         />
         <input type='date' value={startDate} onChange={handleStartDate} />
-        <input type='date' value={endDate} onChange={handleEndDate} />
+        <input
+          type='date'
+          value={endDate}
+          onChange={handleEndDate}
+          disabled={startDate ? false : true}
+        />
         <Button onClick={searchForQuery}>Search</Button>
       </div>
       <div style={{ color: "red" }}>{error}</div>

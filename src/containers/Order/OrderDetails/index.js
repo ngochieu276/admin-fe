@@ -122,69 +122,77 @@ const OrderDetails = (props) => {
             <span className='value'>{selectedOrder.paymentStatus}</span>
           </div>
         </div>
-        <div
-          style={{
-            boxSizing: "border-box",
-            padding: " 50px 100px 50px 100px",
-            alignItems: "center",
-          }}
-        >
-          <div className='orderTrack'>
-            {orderStatus &&
-              orderStatus.map((status) => {
-                return (
-                  <div
-                    className='orderStatus'
-                    className={`orderStatus ${
-                      status.isCompleted ? `active` : null
-                    }`}
-                  >
-                    <BsFillCheckCircleFill
-                      className={`point ${
+        {selectedOrder.isCancel ? (
+          <div>
+            <h2 style={{ color: "red" }}>User has cancel this order</h2>
+          </div>
+        ) : (
+          <div
+            style={{
+              boxSizing: "border-box",
+              padding: " 50px 100px 50px 100px",
+              alignItems: "center",
+            }}
+          >
+            <div className='orderTrack'>
+              {orderStatus &&
+                orderStatus.map((status) => {
+                  return (
+                    <div
+                      className='orderStatus'
+                      className={`orderStatus ${
                         status.isCompleted ? `active` : null
                       }`}
-                    />
+                    >
+                      <BsFillCheckCircleFill
+                        className={`point ${
+                          status.isCompleted ? `active` : null
+                        }`}
+                      />
 
-                    <div className='orderInfo'>
-                      <div className='status'>{status.type.toUpperCase()}</div>
-                      <div className='date'>{formatDate(status.date)}</div>
+                      <div className='orderInfo'>
+                        <div className='status'>
+                          {status.type.toUpperCase()}
+                        </div>
+                        <div className='date'>{formatDate(status.date)}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-          </div>
-          {/* select input to apply order action */}
-          <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-            <option value={""}>Select type</option>
-            <select
-              onClick={(e) => setType(e.target.value)}
-              style={{
-                border: "1px solid #cdcdcd",
-                borderRadius: "2px",
-                padding: "3px 5px",
-              }}
-            >
-              {orderStatus &&
-                orderStatus.map((status, key) => {
-                  return (
-                    <>
-                      {!status.isCompleted ? (
-                        <option key={status.type} value={status.type}>
-                          {status.type}
-                        </option>
-                      ) : null}
-                    </>
                   );
                 })}
-            </select>
+            </div>
+            {/* select input to apply order action */}
+            <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
+              <option value={""}>Select type</option>
+              <select
+                onClick={(e) => setType(e.target.value)}
+                style={{
+                  border: "1px solid #cdcdcd",
+                  borderRadius: "2px",
+                  padding: "3px 5px",
+                }}
+              >
+                {orderStatus &&
+                  orderStatus.map((status, key) => {
+                    return (
+                      <>
+                        {!status.isCompleted ? (
+                          <option key={status.type} value={status.type}>
+                            {status.type}
+                          </option>
+                        ) : null}
+                      </>
+                    );
+                  })}
+              </select>
+            </div>
+            {/* confirm button */}
+            <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
+              <Button onClick={() => onOrderUpdate(selectedOrder._id)}>
+                Confirm
+              </Button>
+            </div>
           </div>
-          {/* confirm button */}
-          <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-            <Button onClick={() => onOrderUpdate(selectedOrder._id)}>
-              Confirm
-            </Button>
-          </div>
-        </div>
+        )}
       </Card>
     </Layout>
   );

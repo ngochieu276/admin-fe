@@ -37,7 +37,7 @@ const UserDetails = (props) => {
         userId: selectedUser._id,
         firstName: firstName || selectedUser.firstName,
         lastName: lastName || selectedUser.lastName,
-        email: email || selectedUser.lastName,
+        email: email || selectedUser.email,
         phone: phone || selectedUser.phone,
         password: password || selectedUser.password,
       },

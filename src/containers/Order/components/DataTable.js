@@ -9,6 +9,8 @@ import FormatDate from "../../../components/UI/FormatDate";
 
 const Styles = styled.div`
   padding: 1rem;
+  display: block;
+  max-width: 100%;
 `;
 
 const App = (props) => {
@@ -53,7 +55,7 @@ const App = (props) => {
         columns: [
           {
             Header: "Status",
-            accessor: "paymentStatus",
+            accessor: "status",
           },
           {
             Header: (

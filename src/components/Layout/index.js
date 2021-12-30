@@ -14,8 +14,8 @@ const Layout = (props) => {
       <Header />
       {props.sidebar ? (
         <Container fluid>
-          <Row>
-            <Col lg={2} className='sidebar'>
+          <div className='layout-container'>
+            <div className='sidebar'>
               <ul>
                 <li>
                   <NavLink to={"/"}>Home</NavLink>
@@ -32,12 +32,13 @@ const Layout = (props) => {
                 <li>
                   <NavLink to={"/post"}>Post</NavLink>
                 </li>
+                <li>
+                  <NavLink to={"/report"}>Report</NavLink>
+                </li>
               </ul>
-            </Col>
-            <Col lg={8} style={{ margin: "auto", paddingTop: "60px" }}>
-              {props.children}
-            </Col>
-          </Row>
+            </div>
+            <div className='content'>{props.children}</div>
+          </div>
         </Container>
       ) : (
         props.children

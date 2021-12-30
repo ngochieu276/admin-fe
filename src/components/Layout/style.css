@@ -3,10 +3,24 @@
   top: 0;
   bottom: 0;
   left: 0;
-  background-color: #eee;
+  /* background-color: #eee; */
+  background: linear-gradient(to right, #3c3b3f, #605c3c);
   padding-top: 60px;
+  padding-right: 10px;
   box-shadow: inset 0 10px 4px gray;
   border-radius: 5px;
+  width: 15vw;
+}
+
+.content {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding-top: 55px;
+  width: 85vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .sidebar a {
@@ -24,9 +38,9 @@
 
 .sidebar ul li a {
   display: block;
-  color: #333;
+  color: #fff;
   padding: 5px 10px;
-  background-color: rgb(210, 223, 223);
+  background-color: inherit;
   box-sizing: border-box;
   margin: 5px 0 5px 10px;
   border-radius: 5px;

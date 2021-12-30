@@ -18,7 +18,7 @@ const PostDetails = () => {
   let { postId } = useParams();
   const { selectedPost, loadingSpec } = useSelector((state) => state.post);
   const [post, setPost] = useState(selectedPost.post);
-  const [tags, setTags] = useState(selectedPost.tags);
+  const [tags, setTags] = useState([]);
   const tagRef = useRef();
 
   const dispatch = useDispatch();
@@ -28,11 +28,18 @@ const PostDetails = () => {
     dispatch(getPostById(postId));
   }, []);
 
+  useEffect(() => {
+    if (selectedPost) {
+      setTags(selectedPost.tags);
+    }
+  }, [selectedPost]);
+
   const updatePostHandler = (e) => {
     const payload = {
       updatePost: {
         postId: selectedPost._id,
         post,
+        tags,
       },
     };
     dispatch(updatePost(payload));
@@ -66,12 +73,13 @@ const PostDetails = () => {
         <button onClick={handleTagsInput}>Add tag</button>
       </div>
       <div style={{ marginTop: "4px" }}>
-        {selectedPost.tags.map((tag) => (
-          <span className='tag'>
-            {tag}
-            <BsXSquare onClick={() => removeTag(tag)} />
-          </span>
-        ))}
+        {tags &&
+          tags.map((tag) => (
+            <span className='tag'>
+              {tag}
+              <BsXSquare onClick={() => removeTag(tag)} />
+            </span>
+          ))}
       </div>
       <CKEditor
         editor={ClassicEditor}

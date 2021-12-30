@@ -1,5 +1,6 @@
 import axios from "../helper/axios";
 import { orderConstants } from "./constant";
+import { getReports } from "./report.action";
 
 export const getCustomerOrders = () => {
   return async (dispatch) => {
@@ -86,6 +87,7 @@ export const updateOrder = (payload) => {
           type: orderConstants.UPDATE_CUSTOMER_ORDER_SUCCESS,
         });
         dispatch(getCustomerOrders());
+        dispatch(getReports());
       } else {
         const { error } = res.data;
         dispatch({

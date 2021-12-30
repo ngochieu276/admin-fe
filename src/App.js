@@ -13,7 +13,8 @@ import OrderDetails from "./containers/Order/OrderDetails";
 import Post from "./containers/Post";
 import PostDetails from "./containers/Post/PostDetails";
 import UserDetails from "./containers/User/UserDetails";
-import { isUserLoggedIn, getInitialData } from "./actions";
+import { Report } from "./containers/Report";
+import { isUserLoggedIn, getReports } from "./actions";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ function App() {
       dispatch(isUserLoggedIn());
     }
   }, [auth.authenticate]);
+
+  useEffect(() => {
+    dispatch(getReports());
+  }, []);
 
   return (
     <div className='App'>
@@ -38,6 +43,7 @@ function App() {
           <PrivateRoute path='/post' component={Post} />
           <PrivateRoute path='/product' component={Product} />
           <PrivateRoute path='/order' component={Order} />
+          <PrivateRoute path='/report' component={Report} />
           <Route path='/login' component={Login} />
         </Switch>
       </Router>
