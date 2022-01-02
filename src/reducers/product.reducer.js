@@ -66,7 +66,7 @@ export default (state = initialState, action) => {
     case productConstants.GET_PRODUCT_BY_ID_SUCCESS:
       state = {
         ...state,
-        selectedProduct: action.payload.product,
+        selectedProduct: action.payload.selectedProduct,
         loadingSpec: false,
       };
       break;

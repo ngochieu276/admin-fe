@@ -74,11 +74,11 @@ export const getProductById = (productId) => {
       dispatch({ type: productConstants.GET_PRODUCT_BY_ID_REQUEST });
       const res = await axios.get(`product/admin/${productId}`);
       if (res.status === 200) {
-        const { product } = res.data;
+        const { product, histories, oldProduct } = res.data;
 
         dispatch({
           type: productConstants.GET_PRODUCT_BY_ID_SUCCESS,
-          payload: { product },
+          payload: { selectedProduct: { product, histories, oldProduct } },
         });
       } else {
         const { error } = res.data;

@@ -6,6 +6,7 @@ import productReducer from "./product.reducer";
 import orderReducer from "./order.reducer";
 import postReducer from "./post.reducer";
 import reportReducer from "./report.reducer";
+import newReducer from "./new.reducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   order: orderReducer,
   post: postReducer,
   report: reportReducer,
+  new: newReducer,
 });
 
 export default rootReducer;

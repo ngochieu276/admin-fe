@@ -8,7 +8,13 @@ import { Modal, Button } from "react-bootstrap";
 
 export const NewModal = (props) => {
   return (
-    <Modal size={props.size} show={props.show} onHide={props.handleClose}>
+    <Modal
+      size={props.size}
+      show={props.show}
+      onHide={props.handleClose}
+      fullscreen={props.fullscreen}
+      scrollable={true}
+    >
       <Modal.Header closeButton={true}>
         <Modal.Title>{props.modalTitle}</Modal.Title>
       </Modal.Header>

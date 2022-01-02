@@ -8,6 +8,8 @@ import Input from "../../../components/UI/Input";
 import Spinner from "../../../components/UI/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { Container } from "@material-ui/core";
+import NewModal from "../../../components/UI/Modal";
+import TimeLine from "../../../components/UI/TimeLine";
 import "./style.css";
 import { BsXSquare } from "react-icons/bs";
 
@@ -22,7 +24,7 @@ const ProductDetails = (props) => {
     (state) => state.product
   );
 
-  const [edit, setEdit] = useState(false);
+  const [show, setShow] = useState(false);
 
   const [listedPrice, setListedPrice] = useState("");
   const [discountPrice, setDiscountPrice] = useState("");
@@ -44,27 +46,27 @@ const ProductDetails = (props) => {
     dispatch(getProductById(productId));
   }, [products]);
   useEffect(() => {
-    if (selectedProduct) {
-      setTags(selectedProduct.tags);
-      setPhotos(selectedProduct.photos);
-      setUrl(selectedProduct.avatar);
+    if (selectedProduct && selectedProduct.product) {
+      setTags(selectedProduct.product.tags);
+      setPhotos(selectedProduct.product.photos);
+      setUrl(selectedProduct.product.avatar);
     }
   }, [selectedProduct]);
 
   const updateUserHandler = (e) => {
     const payload = {
       updateProduct: {
-        productId: selectedProduct._id,
-        listedPrice: listedPrice || selectedProduct.listedPrice,
-        discountPrice: discountPrice || selectedProduct.discountPrice,
-        is_hot: isHot || selectedProduct.is_hot,
-        tags: tags || selectedProduct.tags,
-        in_slider: inSlider || selectedProduct.in_slider,
-        quantity: quantity || selectedProduct.quantity,
-        description: description || selectedProduct.description,
-        supplier: description || selectedProduct.supplier,
-        photos: photos || selectedProduct.photos,
-        avatar: imgUrl || selectedProduct.avatar,
+        productId: selectedProduct.product._id,
+        listedPrice: listedPrice || selectedProduct.product.listedPrice,
+        discountPrice: discountPrice || selectedProduct.product.discountPrice,
+        is_hot: isHot || selectedProduct.product.is_hot,
+        tags: tags || selectedProduct.product.tags,
+        in_slider: inSlider || selectedProduct.product.in_slider,
+        quantity: quantity || selectedProduct.product.quantity,
+        description: description || selectedProduct.product.description,
+        supplier: description || selectedProduct.product.supplier,
+        photos: photos || selectedProduct.product.photos,
+        avatar: imgUrl || selectedProduct.product.avatar,
       },
     };
     dispatch(updateProduct(payload));
@@ -148,6 +150,21 @@ const ProductDetails = (props) => {
     }
   };
 
+  const renderHistoryModal = (
+    <NewModal
+      size={"xl"}
+      fullscreen={true}
+      show={show}
+      handleClose={() => setShow(false)}
+      onSubmit={() => {
+        console.log("haha");
+      }}
+      modalTitle={"Product update history"}
+    >
+      {selectedProduct && <TimeLine events={selectedProduct.histories} />}
+    </NewModal>
+  );
+
   if (loadingSpec) {
     return (
       <Layout sidebar>
@@ -159,7 +176,10 @@ const ProductDetails = (props) => {
   return (
     <Layout sidebar>
       <Container className='detail-card'>
-        <h3>{selectedProduct.name}</h3>
+        <h3>{selectedProduct.product.name}</h3>
+        <Button className='detail-history' onClick={() => setShow(true)}>
+          View update History
+        </Button>
         <div className='card-input'>
           <Row>
             <Col>
@@ -173,7 +193,7 @@ const ProductDetails = (props) => {
               <Input
                 label={"Listed Price"}
                 value={listedPrice}
-                placeholder={selectedProduct.listedPrice}
+                placeholder={selectedProduct.product.listedPrice}
                 onChange={(e) => setListedPrice(e.target.value)}
                 className='form-control-sm'
               />
@@ -181,7 +201,7 @@ const ProductDetails = (props) => {
               <Input
                 label={"Discount Price"}
                 value={discountPrice}
-                placeholder={selectedProduct.discountPrice}
+                placeholder={selectedProduct.product.discountPrice}
                 onChange={(e) => setDiscountPrice(e.target.value)}
                 className='form-control-sm'
               />
@@ -205,7 +225,7 @@ const ProductDetails = (props) => {
               <Input
                 label={"Quantity"}
                 value={quantity}
-                placeholder={selectedProduct.quantity}
+                placeholder={selectedProduct.product.quantity}
                 onChange={(e) => setQuantity(e.target.value)}
                 className='form-control-sm'
               />
@@ -213,14 +233,14 @@ const ProductDetails = (props) => {
               <Input
                 label={"Description"}
                 value={description}
-                placeholder={selectedProduct.description}
+                placeholder={selectedProduct.product.description}
                 onChange={(e) => setDescription(e.target.value)}
                 className='form-control-sm'
               />
               <Input
                 label={"Supplier"}
                 value={supplier}
-                placeholder={selectedProduct.supplier}
+                placeholder={selectedProduct.product.supplier}
                 onChange={(e) => setSupplier(e.target.value)}
                 className='form-control-sm'
               />
@@ -255,6 +275,7 @@ const ProductDetails = (props) => {
             </Col>
           </Row>
         </div>
+        {renderHistoryModal}
       </Container>
     </Layout>
   );

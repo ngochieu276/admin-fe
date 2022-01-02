@@ -2,6 +2,13 @@
   box-shadow: 5px 5px 5px #ccc;
   padding: 10px 10px;
   margin: auto;
+  position: relative;
+}
+
+.detail-card .detail-history {
+  position: absolute;
+  top: 2%;
+  right: 5%;
 }
 
 .card-input {

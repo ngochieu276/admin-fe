@@ -14,6 +14,7 @@ import Post from "./containers/Post";
 import PostDetails from "./containers/Post/PostDetails";
 import UserDetails from "./containers/User/UserDetails";
 import { Report } from "./containers/Report";
+import New from "./containers/New";
 import { isUserLoggedIn, getReports } from "./actions";
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <PrivateRoute path='/product' component={Product} />
           <PrivateRoute path='/order' component={Order} />
           <PrivateRoute path='/report' component={Report} />
+          <PrivateRoute path='/new' component={New} />
           <Route path='/login' component={Login} />
         </Switch>
       </Router>

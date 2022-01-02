@@ -85,13 +85,11 @@ const Header = (props) => {
         <Button
           variant='secondary'
           style={{ padding: "0px", backgroundColor: "inherit", border: "none" }}
+          onClick={handleSetChecked}
         >
           <li className='nav-item'>
             <span className='nav-link' onClick={() => {}}>
-              <BsBell
-                style={{ fontSize: "1.5rem" }}
-                onClick={handleSetChecked}
-              />
+              <BsBell style={{ fontSize: "1.5rem" }} />
               <span className='count-reports'>{count}</span>
             </span>
           </li>{" "}

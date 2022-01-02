@@ -9,8 +9,6 @@ const Styles = styled.div`
   padding: 1rem;
   table {
     th {
-      border-bottom: 0.5px solid gray;
-      border-right: 0.5px solid gray;
       text-align: center;
     }
   }
