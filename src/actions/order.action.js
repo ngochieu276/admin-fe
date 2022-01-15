@@ -26,6 +26,99 @@ export const getCustomerOrders = () => {
   };
 };
 
+export const getUncaredOrders = () => {
+  return async (dispatch) => {
+    dispatch({ type: orderConstants.GET_UNCARED_ORDERS_REQUEST });
+    try {
+      const res = await axios.get("order/admin/getUncaredOrders");
+      if (res.status === 200) {
+        const { orders } = res.data;
+        dispatch({
+          type: orderConstants.GET_UNCARED_ORDERS_SUCCESS,
+          payload: { orders },
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: orderConstants.GET_UNCARED_ORDERS_FAILURE,
+          payload: { error },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getCaredOrders = () => {
+  return async (dispatch) => {
+    dispatch({ type: orderConstants.GET_CARED_ORDERS_REQUEST });
+    try {
+      const res = await axios.get("order/admin/getCaredOrders");
+      if (res.status === 200) {
+        const { orders } = res.data;
+        dispatch({
+          type: orderConstants.GET_CARED_ORDERS_SUCCESS,
+          payload: { orders },
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: orderConstants.GET_CARED_ORDERS_FAILURE,
+          payload: { error },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const addOrdersToAdmin = (payload) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post("order/admin/addOrdersToAdmin", {
+        ...payload,
+      });
+      if (res.status === 201) {
+        dispatch(getUncaredOrders());
+      }
+    } catch (err) {
+      console.log(err.response);
+      // const { error } = err.response.data;
+      // dispatch({
+      //   type: orderConstants.GET_CUSTOMER_ORDER_BYEMAIL_FAILURE,
+      //   payload: { error },
+      // });
+    }
+  };
+};
+
+export const managerSearchOrder = (payload) => {
+  return async (dispatch) => {
+    dispatch({ type: orderConstants.MANAGER_SEARCH_ORDER_REQUEST });
+    try {
+      const res = await axios.post("order/admin/manageOrderSearch", {
+        ...payload,
+      });
+      if (res.status === 200) {
+        const { orders } = res.data;
+        dispatch({
+          type: orderConstants.MANAGER_SEARCH_ORDER_SUCCESS,
+          payload: { orders },
+        });
+      }
+    } catch (err) {
+      console.log(err.response);
+      const { error } = err.response.data;
+      dispatch({
+        type: orderConstants.MANAGER_SEARCH_ORDER_FAILURE,
+        payload: { error },
+      });
+    }
+  };
+};
+
 export const getOrdersByEmail = (payload) => {
   return async (dispatch) => {
     dispatch({ type: orderConstants.GET_CUSTOMER_ORDER_BYEMAIL_REQUEST });

@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 import { getInSliderProducts, getIsHotProducts } from "../../../actions";
 import { useDispatch } from "react-redux";
 import { BsPin } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const Styles = styled.div`
   padding: 1rem;
 `;
 
 function App(props) {
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const getIsHot = () => {
@@ -89,7 +91,7 @@ function App(props) {
         Header: "Details",
         columns: [
           {
-            Header: "Update",
+            Header: "Details",
             accessor: "update",
           },
           {
@@ -132,7 +134,12 @@ function App(props) {
           </Button>
         ),
         delete: (
-          <Button onClick={() => deleteHandler(product._id)}>Delete</Button>
+          <Button
+            disabled={!auth.user.isMng}
+            onClick={() => deleteHandler(product._id)}
+          >
+            Delete
+          </Button>
         ),
       };
     });

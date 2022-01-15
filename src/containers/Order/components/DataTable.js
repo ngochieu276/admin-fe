@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Table from "../../../components/UI/Table";
 import { Link } from "react-router-dom";
-import { getOrderBy } from "../../../actions";
-import { useDispatch } from "react-redux";
+import { getOrderBy, addOrdersToAdmin } from "../../../actions";
+import { useDispatch, useSelector } from "react-redux";
 import FormatDate from "../../../components/UI/FormatDate";
 
 const Styles = styled.div`
@@ -15,18 +15,49 @@ const Styles = styled.div`
 
 const App = (props) => {
   const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.user);
+  const auth = useSelector((state) => state.auth);
+  const [checked, setChecked] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
 
   const sortOrderBy = (value) => {
     if (value === "1" || value === "-1") {
       dispatch(getOrderBy(Number(value)));
     }
   };
+  const handleCheck = (event) => {
+    let updatedList = [...checked];
+    if (event.target.checked) {
+      updatedList = [...checked, event.target.value];
+    } else {
+      updatedList.splice(checked.indexOf(event.target.value), 1);
+    }
+    setChecked(updatedList);
+  };
+
+  const handleAddOrderToAd = () => {
+    const payload = {
+      adminId: selectedUser,
+      orderArray: checked,
+    };
+    if (auth.user.isMng) {
+      dispatch(addOrdersToAdmin(payload));
+    }
+  };
+
+  const adminList = users.filter(
+    (user) => user.role === "admin" && !user.isMng
+  );
 
   const columns = React.useMemo(
     () => [
       {
         Header: "Name",
         columns: [
+          {
+            Header: " Select",
+            accessor: "select",
+          },
           {
             Header: " OrderBy",
             accessor: "orderBy",
@@ -91,6 +122,15 @@ const App = (props) => {
     return data.map((order) => {
       return {
         ...order,
+        select: (
+          <input
+            type='checkbox'
+            id={order._id}
+            name={order._id}
+            value={order._id}
+            onChange={handleCheck}
+          />
+        ),
         orderBy: order.user.email,
         totalItem: order.items
           .map((item) => item.purchaseQty)
@@ -106,9 +146,27 @@ const App = (props) => {
     });
   };
 
+  const selectUser = (
+    <div style={{ display: "flex" }}>
+      <div className='select'>
+        <select
+          className='standard-select'
+          onClick={(e) => setSelectedUser(e.target.value)}
+        >
+          <option value=''>Select admin:</option>
+          {adminList.map((user) => {
+            return <option value={user._id}>{user.userName}</option>;
+          })}
+        </select>
+      </div>
+      <Button onClick={handleAddOrderToAd}>Assign for </Button>
+    </div>
+  );
+
   return (
     <Styles>
-      <Table columns={columns} data={makeData(props.data)} />
+      {auth.user.isMng && selectUser}
+      <Table columns={columns} data={makeData(props.data)} checkBox />
     </Styles>
   );
 };

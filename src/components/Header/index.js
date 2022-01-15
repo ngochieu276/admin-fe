@@ -39,7 +39,6 @@ const Header = (props) => {
   );
 
   const handleSetChecked = () => {
-    setCount(0);
     dispatch(updateReportsToChecked());
   };
 

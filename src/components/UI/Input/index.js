@@ -1,5 +1,6 @@
 import React from "react";
 import { Form } from "react-bootstrap";
+
 /**
  * @author
  * @function Input
@@ -20,7 +21,6 @@ export const Input = (props) => {
             onChange={props.onChange}
             {...props}
           />
-          <Form.Text className='text-muted'>{props.errorMessage}</Form.Text>
         </Form.Group>
       );
       break;
@@ -57,7 +57,6 @@ export const Input = (props) => {
             onChange={props.onChange}
             {...props}
           />
-          <Form.Text className='text-muted'>{props.errorMessage}</Form.Text>
         </Form.Group>
       );
   }

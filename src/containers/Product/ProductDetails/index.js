@@ -23,6 +23,7 @@ const ProductDetails = (props) => {
   const { selectedProduct, loadingSpec, error, products } = useSelector(
     (state) => state.product
   );
+  const auth = useSelector((state) => state.auth);
 
   const [show, setShow] = useState(false);
 
@@ -184,11 +185,13 @@ const ProductDetails = (props) => {
           <Row>
             <Col>
               <h6>Edit avatar </h6>
-              <input
-                type='file'
-                onChange={handleFileInput}
-                ref={imageInputRef}
-              />
+              {auth.user.isMng && (
+                <input
+                  type='file'
+                  onChange={handleFileInput}
+                  ref={imageInputRef}
+                />
+              )}
               {imgUrl && <img className='avatar' alt='avatar' src={imgUrl} />}
               <Input
                 label={"Listed Price"}
@@ -244,10 +247,12 @@ const ProductDetails = (props) => {
                 onChange={(e) => setSupplier(e.target.value)}
                 className='form-control-sm'
               />
-              <div>
-                <input type='text' ref={tagRef} placeholder={"Edit tags"} />
-                <Button onClick={handleTagsInput}>Add tag</Button>
-              </div>
+              {auth.user.isMng && (
+                <div>
+                  <input type='text' ref={tagRef} placeholder={"Edit tags"} />
+                  <Button onClick={handleTagsInput}>Add tag</Button>
+                </div>
+              )}
               <div style={{ marginTop: "4px" }}>
                 {tags &&
                   tags.map((tag) => (
@@ -258,20 +263,26 @@ const ProductDetails = (props) => {
                   ))}
               </div>
               <h4>Edits Photos</h4>
-              <input type='file' onChange={handlePhotosInput} />
+              {auth.user.isMng && (
+                <input type='file' onChange={handlePhotosInput} />
+              )}
               <div style={{ display: "flex" }}>
                 {photos &&
                   photos.map((photo) => (
                     <div className='photo-item'>
                       <img className='avatar' alt='photo' src={photo} />
-                      <BsXSquare
-                        onClick={() => removePhoto(photo)}
-                        className='icon'
-                      />
+                      {auth.user.isMng && (
+                        <BsXSquare
+                          onClick={() => removePhoto(photo)}
+                          className='icon'
+                        />
+                      )}
                     </div>
                   ))}
               </div>
-              <Button onClick={updateUserHandler}>Update</Button>
+              {auth.user.isMng && (
+                <Button onClick={updateUserHandler}>Update</Button>
+              )}
             </Col>
           </Row>
         </div>

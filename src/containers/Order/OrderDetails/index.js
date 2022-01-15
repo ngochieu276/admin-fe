@@ -24,6 +24,7 @@ const OrderDetails = (props) => {
   const { selectedOrder, orders, loading } = useSelector(
     (state) => state.order
   );
+  const auth = useSelector((state) => state.auth);
   const [type, setType] = useState("");
 
   const [orderStatus, setOrderStatus] = useState([]);
@@ -131,6 +132,8 @@ const OrderDetails = (props) => {
             style={{
               boxSizing: "border-box",
               padding: " 50px 100px 50px 100px",
+              display: "flex",
+              flexDirection: "column",
               alignItems: "center",
             }}
           >
@@ -161,36 +164,39 @@ const OrderDetails = (props) => {
                 })}
             </div>
             {/* select input to apply order action */}
-            <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-              <option value={""}>Select type</option>
-              <select
-                onClick={(e) => setType(e.target.value)}
-                style={{
-                  border: "1px solid #cdcdcd",
-                  borderRadius: "2px",
-                  padding: "3px 5px",
-                }}
-              >
-                {orderStatus &&
-                  orderStatus.map((status, key) => {
-                    return (
-                      <>
-                        {!status.isCompleted ? (
-                          <option key={status.type} value={status.type}>
-                            {status.type}
-                          </option>
-                        ) : null}
-                      </>
-                    );
-                  })}
-              </select>
-            </div>
+            {!auth.user.isMng && (
+              <>
+                <div
+                  style={{
+                    margin: "50px 50px 0px 50px",
+                    boxSizing: "border-box",
+                  }}
+                  className='select'
+                >
+                  {/* <option value={""}>Select type</option> */}
+                  <select onClick={(e) => setType(e.target.value)}>
+                    {orderStatus &&
+                      orderStatus.map((status, key) => {
+                        return (
+                          <>
+                            {!status.isCompleted ? (
+                              <option key={status.type} value={status.type}>
+                                {status.type}
+                              </option>
+                            ) : null}
+                          </>
+                        );
+                      })}
+                  </select>
+                </div>
+                <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
+                  <Button onClick={() => onOrderUpdate(selectedOrder._id)}>
+                    Confirm
+                  </Button>
+                </div>
+              </>
+            )}
             {/* confirm button */}
-            <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-              <Button onClick={() => onOrderUpdate(selectedOrder._id)}>
-                Confirm
-              </Button>
-            </div>
           </div>
         )}
       </Card>

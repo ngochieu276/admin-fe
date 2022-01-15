@@ -15,7 +15,15 @@ import PostDetails from "./containers/Post/PostDetails";
 import UserDetails from "./containers/User/UserDetails";
 import { Report } from "./containers/Report";
 import New from "./containers/New";
-import { isUserLoggedIn, getReports } from "./actions";
+import {
+  isUserLoggedIn,
+  getReports,
+  getUsers,
+  getTopSales,
+  getSalesByDay,
+  getPopTags,
+  getSalesByMonth,
+} from "./actions";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,7 +36,14 @@ function App() {
   }, [auth.authenticate]);
 
   useEffect(() => {
+    const thisMonth = new Date().getMonth() + 1;
+
     dispatch(getReports());
+    dispatch(getUsers(""));
+    dispatch(getTopSales());
+    dispatch(getSalesByDay({ month: thisMonth }));
+    dispatch(getPopTags({ daysAgo: 7 }));
+    dispatch(getSalesByMonth());
   }, []);
 
   return (
@@ -40,7 +55,7 @@ function App() {
           <PrivateRoute path='/order/:orderId' component={OrderDetails} />
           <PrivateRoute path='/post/:postId' component={PostDetails} />
           <PrivateRoute path='/user/:userId' component={UserDetails} />
-          <PrivateRoute path='/user' component={User} />
+          {auth.user.isMng && <PrivateRoute path='/user' component={User} />}
           <PrivateRoute path='/post' component={Post} />
           <PrivateRoute path='/product' component={Product} />
           <PrivateRoute path='/order' component={Order} />

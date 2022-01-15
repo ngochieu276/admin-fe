@@ -3,12 +3,23 @@ import "./style.css";
 import Header from "../Header";
 import { Jumbotron, Row, Col, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {
+  BsClipboardData,
+  BsFillPersonFill,
+  BsNewspaper,
+  BsSignpostFill,
+  BsLayoutTextWindowReverse,
+  BsFillCollectionFill,
+  BsFillHouseDoorFill,
+} from "react-icons/bs";
 /**
  * @author
  * @function Layout
  **/
 
 const Layout = (props) => {
+  const auth = useSelector((state) => state.auth);
   return (
     <>
       <Header />
@@ -18,25 +29,42 @@ const Layout = (props) => {
             <div className='sidebar'>
               <ul>
                 <li>
-                  <NavLink to={"/"}>Home</NavLink>
+                  <NavLink to={"/"}>
+                    {" "}
+                    <BsFillHouseDoorFill /> Home
+                  </NavLink>
+                </li>
+                {auth.user.isMng && (
+                  <li>
+                    <NavLink to={"/user"}>
+                      <BsFillPersonFill /> User
+                    </NavLink>
+                  </li>
+                )}
+                <li>
+                  <NavLink to={"/product"}>
+                    <BsFillCollectionFill /> Product
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/user"}>User</NavLink>
+                  <NavLink to={"/order"}>
+                    <BsLayoutTextWindowReverse /> Order
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/product"}>Product</NavLink>
+                  <NavLink to={"/post"}>
+                    <BsSignpostFill /> Post
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/order"}>Order</NavLink>
+                  <NavLink to={"/new"}>
+                    <BsNewspaper /> New
+                  </NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/post"}>Post</NavLink>
-                </li>
-                <li>
-                  <NavLink to={"/new"}>New</NavLink>
-                </li>
-                <li>
-                  <NavLink to={"/report"}>Report</NavLink>
+                  <NavLink to={"/report"}>
+                    <BsClipboardData /> Report
+                  </NavLink>
                 </li>
               </ul>
             </div>

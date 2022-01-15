@@ -10,6 +10,7 @@ const initialState = {
     phone: "",
     email: "",
     picture: "",
+    isMng: false,
   },
   authenticate: false,
   authenticating: false,

@@ -34,6 +34,9 @@
 
 .sidebar ul li {
   list-style: none;
+  padding-left: 15%;
+  padding-right: 15%;
+  text-align: left;
 }
 
 .sidebar ul li a {
@@ -46,6 +49,11 @@
   border-radius: 5px;
   text-decoration: none;
   transition: 0.25s ease all;
+
+  left: 30%;
+}
+.sidebar ul li a svg {
+  margin-right: 35px;
 }
 
 .sidebar ul li a.active {

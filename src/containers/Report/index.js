@@ -72,52 +72,34 @@ export const Report = (props) => {
         onChange={handleEndDate}
         disabled={startDate ? false : true}
       />
-      <div style={{ padding: "0 50px", boxSizing: "border-box" }}>
-        <label for='actionBy'>Action By: </label>
-        <select
-          onClick={(e) => setRole(e.target.value)}
-          name='actionBy'
-          style={{
-            border: "0.5px solid gray",
-            borderRadius: "4px",
-            margin: "0 7px",
-          }}
-        >
-          <option value={""}>choose</option>
-          <option value={"admin"}>Admin</option>
-          <option value={"user"}>User</option>
-        </select>
-        <label for='field'>Field: </label>
-        <select
-          onClick={(e) => {
-            setField(e.target.value);
-          }}
-          name='field'
-          style={{
-            border: "0.5px solid gray",
-            borderRadius: "4px",
-            margin: "0 7px",
-          }}
-        >
-          <option value={""}>choose</option>
-          <option value={"order"}>Order</option>
-          <option value={"product"}>Product</option>
-        </select>
-        <label for='action'>Action: </label>
-        <select
-          onClick={(e) => setAction(e.target.value)}
-          name='action'
-          style={{
-            border: "0.5px solid gray",
-            borderRadius: "4px",
-            margin: " 7px",
-          }}
-        >
-          <option value={""}>choose</option>
-          <option value={"create"}>Create</option>
-          <option value={"update"}>Update</option>
-          <option value={"delete"}>Delete</option>
-        </select>
+      <div style={{ padding: "0 50px", display: "flex" }}>
+        <div className='select'>
+          <select onClick={(e) => setRole(e.target.value)} name='actionBy'>
+            <option value={""}>Action By</option>
+            <option value={"admin"}>Admin</option>
+            <option value={"user"}>User</option>
+          </select>
+        </div>
+        <div className='select'>
+          <select
+            onClick={(e) => {
+              setField(e.target.value);
+            }}
+            name='field'
+          >
+            <option value={""}>Field</option>
+            <option value={"order"}>Order</option>
+            <option value={"product"}>Product</option>
+          </select>
+        </div>
+        <div className='select'>
+          <select onClick={(e) => setAction(e.target.value)} name='action'>
+            <option value={""}>Action</option>
+            <option value={"create"}>Create</option>
+            <option value={"update"}>Update</option>
+            <option value={"delete"}>Delete</option>
+          </select>
+        </div>
       </div>
       <Button onClick={handleAdvangeSearch}>Search</Button>
     </div>

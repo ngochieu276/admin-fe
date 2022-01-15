@@ -9,3 +9,13 @@
   margin: 0 4px;
   cursor: pointer;
 }
+
+.searchBar {
+  position: relative;
+}
+
+.searchItem {
+  position: absolute;
+  top: 15px;
+  right: 5px;
+}

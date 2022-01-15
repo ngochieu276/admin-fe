@@ -11,7 +11,7 @@ import {
 import TableData from "./components/DataTable";
 import NewModal from "../../components/UI/Modal";
 import Spinner from "../../components/UI/Spinner";
-import { BsXSquare } from "react-icons/bs";
+import { BsXSquare, BsSearch } from "react-icons/bs";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -40,6 +40,7 @@ const Product = (props) => {
 
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.product);
+  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getProducts(""));
@@ -213,22 +214,28 @@ const Product = (props) => {
   return (
     <Layout sidebar>
       <div style={{ display: "flex", padding: "1rem" }}>
-        <Input
-          placeholder='Search for user'
-          value={query}
-          type='text'
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
-        />
+        <div className='searchBar'>
+          <Input
+            placeholder={"Search for product"}
+            value={query}
+            type='text'
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+          />
+          <BsSearch className='searchItem' />
+        </div>
+
         <Button onClick={searchForQuery}>Search</Button>
-        <Button
-          onClick={() => {
-            setShow(true);
-          }}
-        >
-          Add new Product
-        </Button>
+        {auth.user.isMng && (
+          <Button
+            onClick={() => {
+              setShow(true);
+            }}
+          >
+            Add new Product
+          </Button>
+        )}
       </div>
 
       <TableData data={products} onDelete={onDelete} />

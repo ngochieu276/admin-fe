@@ -1,0 +1,20 @@
+.homepage {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 20px;
+  padding: 10px;
+}
+
+.chart {
+  height: 45vh;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10 auto 10px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.chart p {
+  text-align: left;
+  margin-left: 5%;
+}
