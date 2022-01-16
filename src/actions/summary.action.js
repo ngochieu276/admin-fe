@@ -1,11 +1,13 @@
 import axios from "../helper/axios";
 import { summaryConstant } from "./constant";
 
-export const getTopSales = () => {
+export const getTopSales = (payload) => {
   return async (dispatch) => {
     dispatch({ type: summaryConstant.GET_TOP_SALES_REQUEST });
     try {
-      const res = await axios.get("summary/getBestSalesProduct");
+      const res = await axios.post("summary/getBestSalesProduct", {
+        ...payload,
+      });
       if (res.status === 200) {
         const { results } = res.data;
 
@@ -67,6 +69,25 @@ export const getPopTags = (payload) => {
         dispatch({
           type: summaryConstant.GET_POP_TAGS_SUCCESS,
           payload: { popTags: results },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getUserBuyList = () => {
+  return async (dispatch) => {
+    dispatch({ type: summaryConstant.GET_USER_BUY_REQUEST });
+    try {
+      const res = await axios.get("summary/getSalesByUsers");
+      if (res.status === 200) {
+        const { results } = res.data;
+
+        dispatch({
+          type: summaryConstant.GET_USER_BUY_SUCCESS,
+          payload: { usersBuyList: results },
         });
       }
     } catch (err) {

@@ -13,6 +13,7 @@ import OrderDetails from "./containers/Order/OrderDetails";
 import Post from "./containers/Post";
 import PostDetails from "./containers/Post/PostDetails";
 import UserDetails from "./containers/User/UserDetails";
+import LoyalClient from "./containers/LoyalClient";
 import { Report } from "./containers/Report";
 import New from "./containers/New";
 import {
@@ -23,11 +24,13 @@ import {
   getSalesByDay,
   getPopTags,
   getSalesByMonth,
+  getUserBuyList,
 } from "./actions";
 
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  const thisMonth = new Date().getMonth() + 1;
 
   useEffect(() => {
     if (!auth.authenticate) {
@@ -36,14 +39,13 @@ function App() {
   }, [auth.authenticate]);
 
   useEffect(() => {
-    const thisMonth = new Date().getMonth() + 1;
-
     dispatch(getReports());
     dispatch(getUsers(""));
-    dispatch(getTopSales());
+    dispatch(getTopSales({ month: thisMonth }));
     dispatch(getSalesByDay({ month: thisMonth }));
     dispatch(getPopTags({ daysAgo: 7 }));
     dispatch(getSalesByMonth());
+    dispatch(getUserBuyList());
   }, []);
 
   return (
@@ -59,6 +61,7 @@ function App() {
           <PrivateRoute path='/post' component={Post} />
           <PrivateRoute path='/product' component={Product} />
           <PrivateRoute path='/order' component={Order} />
+          <PrivateRoute path='/loyal-client' component={LoyalClient} />
           <PrivateRoute path='/report' component={Report} />
           <PrivateRoute path='/new' component={New} />
           <Route path='/login' component={Login} />

@@ -12,6 +12,7 @@ import {
   BsLayoutTextWindowReverse,
   BsFillCollectionFill,
   BsFillHouseDoorFill,
+  BsFillSuitSpadeFill,
 } from "react-icons/bs";
 /**
  * @author
@@ -59,6 +60,11 @@ const Layout = (props) => {
                 <li>
                   <NavLink to={"/new"}>
                     <BsNewspaper /> New
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={"/loyal-client"}>
+                    <BsFillSuitSpadeFill /> Loyal client
                   </NavLink>
                 </li>
                 <li>

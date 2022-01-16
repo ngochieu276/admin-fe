@@ -5,10 +5,12 @@ const initialState = {
   salesByDay: null,
   salesByMonth: null,
   popTags: null,
+  usersBuyList: null,
   loadTopSales: true,
   loadSalesByDay: true,
   loadPopTags: true,
   loadSalesByMonth: true,
+  loadUserBuyList: true,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -98,6 +100,29 @@ export default (state = initialState, action) => {
       state = {
         ...state,
         loadPopTags: false,
+        error: action.payload.error,
+      };
+      break;
+
+    //
+
+    case summaryConstant.GET_USER_BUY_REQUEST:
+      state = {
+        ...state,
+        loadPopTags: true,
+      };
+      break;
+    case summaryConstant.GET_USER_BUY_SUCCESS:
+      state = {
+        ...state,
+        loadUserBuyList: false,
+        usersBuyList: action.payload.usersBuyList,
+      };
+      break;
+    case summaryConstant.GET_USER_BUY_FAILURE:
+      state = {
+        ...state,
+        loadUserBuyList: false,
         error: action.payload.error,
       };
       break;
