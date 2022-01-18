@@ -4,9 +4,17 @@ import ProductChart from "./Component/ProductChart";
 import IncomeChart from "./Component/IncomeChart";
 import HotTagsChart from "./Component/HotTagsChart";
 import MonthSaleChart from "./Component/MonthSaleChart";
+import RebuyChart from "./Component/RebuyChart";
 import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
-import { getPopTags, getSalesByDay, getTopSales } from "../../actions";
+import Input from "../../components/UI/Input";
+import {
+  getPopTags,
+  getSalesByDay,
+  getTopSales,
+  getRebuyPercent,
+} from "../../actions";
+import { BsSearch } from "react-icons/bs";
 
 /**
  * @author
@@ -18,6 +26,7 @@ const Home = (props) => {
   const [date, setDate] = useState(7);
   const [salesMonth, setSalesMonth] = useState(new Date().getMonth() + 1);
   const [productMonth, setProductMonth] = useState(new Date().getMonth() + 1);
+  const [atLeast, setAtleast] = useState();
   const datePick = [
     { day: 7, title: "a week ago" },
     { day: 15, title: "2 week ago" },
@@ -58,6 +67,9 @@ const Home = (props) => {
       dispatch(getTopSales({ month: Number(value) }));
       setProductMonth(value);
     }
+  };
+  const queryBuyAtLeast = () => {
+    dispatch(getRebuyPercent({ atLeast: Number(atLeast) }));
   };
   return (
     <Layout sidebar>
@@ -105,8 +117,22 @@ const Home = (props) => {
               })}
             </select>
           </div>
-
           <HotTagsChart />
+        </div>
+        <div className='chart'>
+          <h4>Rebuy percent</h4>
+          <div className='searchBar'>
+            <Input
+              placeholder={"Enter number"}
+              value={atLeast}
+              type='text'
+              onChange={(e) => {
+                setAtleast(e.target.value);
+              }}
+            />
+            <BsSearch className='searchItem' onClick={queryBuyAtLeast} />
+          </div>
+          <RebuyChart />
         </div>
       </div>
     </Layout>

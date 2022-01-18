@@ -6,11 +6,13 @@ const initialState = {
   salesByMonth: null,
   popTags: null,
   usersBuyList: null,
+  rebuyList: null,
   loadTopSales: true,
   loadSalesByDay: true,
   loadPopTags: true,
   loadSalesByMonth: true,
   loadUserBuyList: true,
+  loadRebuyList: true,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -123,6 +125,29 @@ export default (state = initialState, action) => {
       state = {
         ...state,
         loadUserBuyList: false,
+        error: action.payload.error,
+      };
+      break;
+
+    //
+
+    case summaryConstant.GET_REBUY_REQUEST:
+      state = {
+        ...state,
+        loadRebuyList: true,
+      };
+      break;
+    case summaryConstant.GET_REBUY_SUCCESS:
+      state = {
+        ...state,
+        loadRebuyList: false,
+        rebuyList: action.payload.rebuyList,
+      };
+      break;
+    case summaryConstant.GET_REBUY_FAILURE:
+      state = {
+        ...state,
+        loadRebuyList: false,
         error: action.payload.error,
       };
       break;

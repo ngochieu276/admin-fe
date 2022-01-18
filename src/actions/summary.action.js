@@ -95,3 +95,22 @@ export const getUserBuyList = () => {
     }
   };
 };
+
+export const getRebuyPercent = (payload) => {
+  return async (dispatch) => {
+    dispatch({ type: summaryConstant.GET_REBUY_REQUEST });
+    try {
+      const res = await axios.post("summary/getRebuyPercent", payload);
+      if (res.status === 200) {
+        const { results } = res.data;
+        const rebuyList = results[0].data;
+        dispatch({
+          type: summaryConstant.GET_REBUY_SUCCESS,
+          payload: { rebuyList: rebuyList },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};

@@ -25,6 +25,7 @@ import {
   getPopTags,
   getSalesByMonth,
   getUserBuyList,
+  getRebuyPercent,
 } from "./actions";
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
     dispatch(getSalesByDay({ month: thisMonth }));
     dispatch(getPopTags({ daysAgo: 7 }));
     dispatch(getSalesByMonth());
+    dispatch(getRebuyPercent());
     dispatch(getUserBuyList());
   }, []);
 

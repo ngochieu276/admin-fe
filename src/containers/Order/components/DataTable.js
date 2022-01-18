@@ -117,6 +117,17 @@ const App = (props) => {
     ],
     []
   );
+  const renderStatus = (status) => {
+    if (status === "completed") {
+      return <p style={{ color: "green" }}>{status}</p>;
+    } else if (status === "in_progress") {
+      return <p style={{ color: "blue" }}>{status}</p>;
+    } else if (status === "ordered") {
+      return <p style={{ color: "orange" }}>{status}</p>;
+    } else if (status === "cancelled") {
+      return <p style={{ color: "gray" }}>{status}</p>;
+    }
+  };
 
   const makeData = (data) => {
     return data.map((order) => {
@@ -131,6 +142,7 @@ const App = (props) => {
             onChange={handleCheck}
           />
         ),
+        status: renderStatus(order.status),
         orderBy: order.user.email,
         totalItem: order.items
           .map((item) => item.purchaseQty)
