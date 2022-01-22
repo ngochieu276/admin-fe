@@ -92,19 +92,30 @@ const IncomeChart = (props) => {
   if (loadSalesByDay) {
     return <Spinner />;
   }
-  const modData = salesByDay.map((dat) => {
-    return {
-      name: dat._id,
-      totalSale: dat.totalSale / 10000,
-    };
-  });
+
+  const modData = () => {
+    const returnData = [];
+    for (let i = 1; i <= 31; i++) {
+      if (salesByDay.length > 0 && salesByDay.some((day) => day._id == i)) {
+        salesByDay.map((day) => {
+          if (day._id === i) {
+            returnData.push({ name: i, totalSale: day.totalSale });
+          }
+        });
+      } else {
+        returnData.push({ name: i, totalSale: 0 });
+      }
+    }
+    return returnData;
+  };
+  console.log(modData());
 
   const returnChart = (
     <ResponsiveContainer width='100%' height='80%'>
       <LineChart
         width={500}
         height={300}
-        data={modData}
+        data={modData()}
         margin={{
           top: 5,
           right: 30,
