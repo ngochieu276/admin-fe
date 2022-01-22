@@ -22,20 +22,36 @@ const MonthSaleChart = (props) => {
   if (loadSalesByMonth) {
     return <Spinner />;
   }
-  const modData = salesByMonth.map((dat) => {
-    return {
-      name: dat._id,
-      totalQuantity: dat.totalQuantity,
-      totalSale: dat.totalSale / 10000,
-    };
-  });
+
+  const modData = () => {
+    const returnData = [];
+    for (let i = 1; i <= 12; i++) {
+      if (
+        salesByMonth.length > 0 &&
+        salesByMonth.some((month) => month._id == i)
+      ) {
+        salesByMonth.map((month) => {
+          if (month._id === i) {
+            returnData.push({
+              name: i,
+              totalSale: month.totalSale,
+              totalQuantity: month.totalQuantity,
+            });
+          }
+        });
+      } else {
+        returnData.push({ name: i, totalSale: 0, totalQuantity: 0 });
+      }
+    }
+    return returnData;
+  };
 
   let returnChart = (
     <ResponsiveContainer width='100%' height='80%'>
       <ComposedChart
         width={500}
         height={400}
-        data={modData}
+        data={modData()}
         margin={{
           top: 0,
           right: 20,

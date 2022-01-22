@@ -108,7 +108,6 @@ const IncomeChart = (props) => {
     }
     return returnData;
   };
-  console.log(modData());
 
   const returnChart = (
     <ResponsiveContainer width='100%' height='80%'>
