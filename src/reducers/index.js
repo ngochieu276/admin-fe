@@ -8,6 +8,7 @@ import postReducer from "./post.reducer";
 import reportReducer from "./report.reducer";
 import newReducer from "./new.reducer";
 import summaryReducer from "./summary.reducer";
+import loyalReducer from "./loyal.reducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   post: postReducer,
   report: reportReducer,
   new: newReducer,
+  loyal: loyalReducer,
   summary: summaryReducer,
 });
 

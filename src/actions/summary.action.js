@@ -81,7 +81,7 @@ export const getUserBuyList = () => {
   return async (dispatch) => {
     dispatch({ type: summaryConstant.GET_USER_BUY_REQUEST });
     try {
-      const res = await axios.get("summary/getSalesByUsers");
+      const res = await axios.get("loyal/admin/salesByUser");
       if (res.status === 200) {
         const { results } = res.data;
 

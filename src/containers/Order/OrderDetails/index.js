@@ -120,7 +120,7 @@ const OrderDetails = (props) => {
           </div>
           <div>
             <span className='title'>Payment Status</span> <br />
-            <span className='value'>{selectedOrder.paymentStatus}</span>
+            <span className='value'>{selectedOrder.status}</span>
           </div>
         </div>
         {selectedOrder.isCancel ? (

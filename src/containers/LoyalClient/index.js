@@ -7,6 +7,7 @@ import TableData from "./components/DataTable";
 import { useDispatch, useSelector } from "react-redux";
 import NewModal from "../../components/UI/Modal";
 import Spinner from "../../components/UI/Spinner";
+import { getLoyalList } from "../../actions/loyal.action";
 
 /**
  * @author
@@ -14,21 +15,21 @@ import Spinner from "../../components/UI/Spinner";
  **/
 
 const LoyalClient = (props) => {
-  const { usersBuyList, loadUserBuyList } = useSelector(
-    (state) => state.summary
-  );
-  if (loadUserBuyList) {
+  const { loyalList, loading } = useSelector((state) => state.loyal);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getLoyalList());
+  }, []);
+
+  if (loading) {
     return (
       <Layout sidebar>
         <Spinner />
       </Layout>
     );
   }
-  return (
-    <Layout sidebar>
-      <TableData data={usersBuyList} />
-    </Layout>
-  );
+  return <Layout sidebar>{<TableData data={loyalList} />}</Layout>;
 };
 
 export default LoyalClient;
